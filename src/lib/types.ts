@@ -27,8 +27,12 @@ export interface Post {
   author: string;
   createdAt: string; // Should be ISO8601 string
   updatedAt?: string; // Should be ISO8601 string
-  categoryName?: string; // Changed from Category object
-  tagsCsv?: string; // Changed from Tag[] - will store as comma-separated string
+  categoryName?: string; 
+  tagsCsv?: string; 
   scheduledAt?: string; // Should be ISO8601 string
-}
 
+  // For compatibility with components that might expect these structures (like PostCard)
+  // These are derived/transformed from categoryName and tagsCsv when needed.
+  category?: Category; 
+  tags?: Tag[];
+}
