@@ -34,33 +34,33 @@ export function Footer() {
     <footer className="border-t py-8 mt-12">
       <div className="container">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div>
+          <div className="text-center">
             <h3 className="font-semibold text-lg mb-2">{APP_NAME}</h3>
             <p className="text-sm text-muted-foreground">
               Automate, manage, and share your content effortlessly.
             </p>
           </div>
-          <div>
+          <div className="text-center">
             <h3 className="font-semibold text-lg mb-2">Newsletter</h3>
-            <form onSubmit={handleSubscription} className="flex gap-2">
+            <form onSubmit={handleSubscription} className="flex flex-col sm:flex-row gap-2 justify-center items-center max-w-sm mx-auto">
               <Input
                 type="email"
                 placeholder="Enter your email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="max-w-xs"
+                className="w-full sm:flex-1"
                 aria-label="Email for newsletter"
               />
-              <Button type="submit" variant="default">Subscribe</Button>
+              <Button type="submit" variant="default" className="w-full sm:w-auto">Subscribe</Button>
             </form>
             <p className="text-xs text-muted-foreground mt-2">
               Stay updated with our latest posts and news.
             </p>
           </div>
-          <div>
+          <div className="text-center">
             <h3 className="font-semibold text-lg mb-2">Follow Us</h3>
             {/* Placeholder for social media links */}
-            <div className="flex space-x-4">
+            <div className="flex space-x-4 justify-center">
               <a href="#" className="text-muted-foreground hover:text-foreground">Twitter</a>
               <a href="#" className="text-muted-foreground hover:text-foreground">Facebook</a>
               <a href="#" className="text-muted-foreground hover:text-foreground">LinkedIn</a>
@@ -74,4 +74,3 @@ export function Footer() {
     </footer>
   );
 }
-
