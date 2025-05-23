@@ -48,7 +48,8 @@ export default function NewPostPage() {
       const result = await createPostAction(postData);
 
       if ('error' in result) {
-        console.error("Failed to create post:", result.error, result.details);
+        // The console.error line previously here was removed as the error is logged server-side
+        // and presented as a toast.
         let description = result.error || "An unknown error occurred while creating the post.";
         // Explicitly type result to access hint property
         const resultWithErrorAndHint = result as { error: string; details?: any; hint?: string };
@@ -66,7 +67,8 @@ export default function NewPostPage() {
       // The PostForm should show its own success toast if onSubmitForm resolves.
 
     } catch (error) {
-      console.error("Error during post creation process:", error);
+      // This console.error is for unexpected errors during the client-side part of the process
+      console.error("Error during post creation process client-side:", error);
       // Let PostForm's generic error handling display a toast
       throw error; 
     } finally {
