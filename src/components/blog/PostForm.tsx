@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarIcon, ImageUp, Tags, ListCollapse } from "lucide-react";
+import { CalendarIcon, Tags, ListCollapse } from "lucide-react"; // ImageUp removed
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -28,8 +28,8 @@ const postFormSchema = z.object({
   content: z.string().min(20, "Content must be at least 20 characters long."),
   category: z.string().optional(),
   tags: z.string().optional(), // comma-separated
-  imageUrl: z.string().url("Must be a valid URL.").optional().or(z.literal('')),
-  imageFile: z.any().optional(), // For file upload
+  // imageUrl: z.string().url("Must be a valid URL.").optional().or(z.literal('')), // Removed
+  // imageFile: z.any().optional(), // Removed
   scheduledAt: z.date().optional(),
 });
 
@@ -50,7 +50,7 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
       content: "",
       category: "",
       tags: "",
-      imageUrl: "",
+      // imageUrl: "", // Removed
     },
   });
 
@@ -67,7 +67,7 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
   return (
     <Card className="max-w-3xl mx-auto shadow-lg">
       <CardHeader>
-        <CardTitle>{initialData?.title ? "Edit Post" : "Create New Post"}</CardTitle>
+        <CardTitle className="font-sans">{initialData?.title ? "Edit Post" : "Create New Post"}</CardTitle>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -77,9 +77,9 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel className="font-sans">Title</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter post title" {...field} />
+                    <Input placeholder="Enter post title" {...field} className="font-sans" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -91,15 +91,15 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
               name="content"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Content</FormLabel>
+                  <FormLabel className="font-sans">Content</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="Write your blog post here..."
-                      className="min-h-[200px]"
+                      className="min-h-[200px] font-serif" // Apply story font here
                       {...field}
                     />
                   </FormControl>
-                  <FormDescription>
+                  <FormDescription className="font-sans">
                     You can use Markdown for formatting.
                   </FormDescription>
                   <FormMessage />
@@ -113,9 +113,9 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
                 name="category"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2"><ListCollapse className="w-4 h-4" /> Category</FormLabel>
+                    <FormLabel className="flex items-center gap-2 font-sans"><ListCollapse className="w-4 h-4" /> Category</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., Technology" {...field} />
+                      <Input placeholder="e.g., Technology" {...field} className="font-sans" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -127,53 +127,33 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
                 name="tags"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="flex items-center gap-2"><Tags className="w-4 h-4" /> Tags</FormLabel>
+                    <FormLabel className="flex items-center gap-2 font-sans"><Tags className="w-4 h-4" /> Tags</FormLabel>
                     <FormControl>
-                      <Input placeholder="e.g., nextjs, react, webdev" {...field} />
+                      <Input placeholder="e.g., nextjs, react, webdev" {...field} className="font-sans" />
                     </FormControl>
-                    <FormDescription>Comma-separated values.</FormDescription>
+                    <FormDescription className="font-sans">Comma-separated values.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
 
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="flex items-center gap-2"><ImageUp className="w-4 h-4" /> Image URL (Optional)</FormLabel>
-                  <FormControl>
-                    <Input type="url" placeholder="https://example.com/image.png" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormItem>
-                <FormLabel className="flex items-center gap-2"><ImageUp className="w-4 h-4" /> Upload Image (Optional)</FormLabel>
-                <FormControl>
-                    <Input type="file" accept="image/*" onChange={(e) => form.setValue('imageFile', e.target.files?.[0])} />
-                </FormControl>
-                <FormDescription>Alternatively, upload an image from your device.</FormDescription>
-            </FormItem>
-
+            {/* ImageUrl Field Removed */}
+            {/* ImageFile Field Removed */}
 
             <FormField
               control={form.control}
               name="scheduledAt"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel className="flex items-center gap-2"><CalendarIcon className="w-4 h-4" /> Schedule Post (Optional)</FormLabel>
+                  <FormLabel className="flex items-center gap-2 font-sans"><CalendarIcon className="w-4 h-4" /> Schedule Post (Optional)</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "w-full pl-3 text-left font-normal",
+                            "w-full pl-3 text-left font-normal font-sans",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -196,7 +176,7 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
                       />
                     </PopoverContent>
                   </Popover>
-                  <FormDescription>
+                  <FormDescription className="font-sans">
                     Leave blank to publish immediately.
                   </FormDescription>
                   <FormMessage />
@@ -205,10 +185,10 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
             />
 
             <div className="flex justify-end gap-4">
-              <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isSubmitting}>
+              <Button type="button" variant="outline" onClick={() => form.reset()} disabled={isSubmitting} className="font-sans">
                 Reset
               </Button>
-              <Button type="submit" disabled={isSubmitting}>
+              <Button type="submit" disabled={isSubmitting} className="font-sans">
                 {isSubmitting ? "Saving..." : (initialData?.title ? "Update Post" : "Create Post")}
               </Button>
             </div>

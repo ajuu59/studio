@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import defaultTheme from 'tailwindcss/defaultTheme';
 
 export default {
     darkMode: ["class"],
@@ -9,6 +10,11 @@ export default {
   ],
   theme: {
   	extend: {
+      fontFamily: {
+        sans: ['var(--font-geist-sans)', ...defaultTheme.fontFamily.sans],
+        mono: ['var(--font-geist-mono)', ...defaultTheme.fontFamily.mono],
+        serif: ['var(--font-merriweather)', ...defaultTheme.fontFamily.serif],
+      },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -87,8 +93,45 @@ export default {
   		animation: {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out'
-  		}
+  		},
+      typography: (theme: any) => ({
+        DEFAULT: {
+          css: {
+            fontFamily: theme('fontFamily.serif').join(', '),
+            color: theme('colors.foreground'),
+            a: {
+              color: theme('colors.primary.DEFAULT'),
+              '&:hover': {
+                color: theme('colors.primary.DEFAULT / 0.9'),
+              },
+            },
+            'h1, h2, h3, h4, h5, h6': {
+              fontFamily: theme('fontFamily.sans').join(', '),
+              color: theme('colors.foreground'),
+            },
+            // You can add more prose styles here
+          },
+        },
+        invert: { // For dark mode if you decide to use it later
+          css: {
+            color: theme('colors.foreground'), // This would be dark theme foreground
+             a: {
+              color: theme('colors.primary.DEFAULT'), // Dark theme primary
+              '&:hover': {
+                color: theme('colors.primary.DEFAULT / 0.9'),
+              },
+            },
+            'h1, h2, h3, h4, h5, h6': {
+               fontFamily: theme('fontFamily.sans').join(', '),
+              color: theme('colors.foreground'), // Dark theme foreground
+            },
+          },
+        },
+      }),
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-animate"),
+    require('@tailwindcss/typography'),
+  ],
 } satisfies Config;

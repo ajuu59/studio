@@ -26,8 +26,8 @@ export interface Post {
   author: string;
   createdAt: string;
   updatedAt?: string;
-  imageUrl?: string;
-  imageHint?: string;
+  // imageUrl?: string; // Removed
+  // imageHint?: string; // Removed
   category?: Category;
   tags?: Tag[];
   scheduledAt?: string;

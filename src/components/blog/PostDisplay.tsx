@@ -2,7 +2,7 @@
 "use client"; // This component handles client-side interactions
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
+// import Image from 'next/image'; // Image import removed
 import type { Post, Comment as CommentType } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, User, Tag as TagIcon } from 'lucide-react';
@@ -37,8 +37,8 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
   return (
     <article className="max-w-3xl mx-auto py-8">
       <header className="mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-3">{post.title}</h1>
-        <div className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-2">
+        <h1 className="text-3xl md:text-4xl font-bold mb-3 font-sans">{post.title}</h1>
+        <div className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-2 font-sans">
           <span className="flex items-center gap-1">
             <User className="h-4 w-4" /> {post.author}
           </span>
@@ -51,26 +51,15 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
         </div>
       </header>
 
-      {post.imageUrl && (
-        <div className="relative aspect-video w-full mb-8 rounded-lg overflow-hidden shadow-md">
-          <Image
-            src={post.imageUrl}
-            alt={post.title}
-            fill // Use fill instead of layout="fill"
-            objectFit="cover"
-            priority // Good for LCP on post pages
-            data-ai-hint={post.imageHint || "blog post image"}
-          />
-        </div>
-      )}
+      {/* Image section removed */}
 
       <div
-        className="prose prose-lg dark:prose-invert max-w-none break-words"
+        className="prose prose-lg dark:prose-invert max-w-none break-words font-serif" // Added font-serif
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
       {post.tags && post.tags.length > 0 && (
-        <div className="mt-8 pt-4 border-t">
+        <div className="mt-8 pt-4 border-t font-sans">
           <h3 className="text-sm font-semibold mb-2 text-muted-foreground flex items-center gap-1">
             <TagIcon className="h-4 w-4" /> TAGS
           </h3>

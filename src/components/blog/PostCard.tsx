@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import type { Post } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -20,25 +19,13 @@ export function PostCard({ post }: PostCardProps) {
   return (
     <Card className="flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
       <CardHeader>
-        {post.imageUrl && (
-          <Link href={`/posts/${post.slug}`} aria-label={`Read more about ${post.title}`}>
-            <div className="relative aspect-video w-full mb-4 rounded-t-md overflow-hidden">
-              <Image
-                src={post.imageUrl}
-                alt={post.title}
-                layout="fill"
-                objectFit="cover"
-                data-ai-hint={post.imageHint || "blog post"}
-              />
-            </div>
-          </Link>
-        )}
-        <CardTitle className="text-xl md:text-2xl">
+        {/* Image removed */}
+        <CardTitle className="text-xl md:text-2xl font-sans">
           <Link href={`/posts/${post.slug}`} className="hover:text-primary transition-colors">
             {post.title}
           </Link>
         </CardTitle>
-        <CardDescription className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">
+        <CardDescription className="text-sm text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 pt-1 font-sans">
           <span className="flex items-center gap-1">
             <User className="h-4 w-4" /> {post.author}
           </span>
@@ -48,9 +35,9 @@ export function PostCard({ post }: PostCardProps) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-grow">
-        <div className="text-muted-foreground text-sm" dangerouslySetInnerHTML={{ __html: createExcerpt(post.content) }} />
+        <div className="text-muted-foreground text-sm font-serif" dangerouslySetInnerHTML={{ __html: createExcerpt(post.content) }} />
       </CardContent>
-      <CardFooter className="flex-col items-start gap-2">
+      <CardFooter className="flex-col items-start gap-2 font-sans">
         {post.category && (
           <Badge variant="secondary" className="mb-2">{post.category.name}</Badge>
         )}
