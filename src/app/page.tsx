@@ -1,6 +1,6 @@
 
 import { PostCard } from '@/components/blog/PostCard';
-import { SearchBar } from '@/components/blog/SearchBar';
+// SearchBar import removed
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { getAllPosts } from '@/lib/db';
@@ -51,7 +51,7 @@ export default async function HomePage() {
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
           Discover insightful articles, tutorials, and stories from our talented authors.
         </p>
-        <SearchBar />
+        {/* SearchBar removed from here */}
       </section>
 
       <section>

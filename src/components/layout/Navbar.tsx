@@ -2,15 +2,14 @@
 "use client";
 
 import Link from 'next/link';
-import { BookMarked, Home, Settings, UserCircle, MessageSquare, LogIn, LogOut } from 'lucide-react';
-// RoleSelector import removed
+import { BookMarked, Home, Settings, UserCircle, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { APP_NAME, DEFAULT_USER_ROLE } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { SearchBar } from '@/components/blog/SearchBar'; // Import SearchBar
 
 export function Navbar() {
   const { userRole, isAuthenticated, logout } = useAuth();
@@ -38,12 +37,7 @@ export function Navbar() {
               <span className="hidden md:inline">Home</span>
             </Link>
           </Button>
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/chat">
-              <MessageSquare className="mr-0 md:mr-2 h-4 w-4" />
-              <span className="hidden md:inline">Chat</span>
-            </Link>
-          </Button>
+          {/* Chat link removed */}
           {isMounted && isAuthenticated(['Admin', 'Editor', 'Contributor']) && (
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin">
@@ -53,10 +47,16 @@ export function Navbar() {
             </Button>
           )}
         </nav>
+
+        {/* Add SearchBar here */}
+        <div className="flex-none px-2 md:px-4">
+          <SearchBar />
+        </div>
+
         <div className="flex items-center space-x-2 md:space-x-4">
           {!isMounted && (
             <div className="flex items-center gap-2">
-              <Skeleton className="w-20 h-9" /> 
+              <Skeleton className="w-20 h-9" />
               <Skeleton className="w-10 h-10 rounded-full" />
             </div>
           )}
