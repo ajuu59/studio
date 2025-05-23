@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -23,7 +24,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex w-full max-w-xl items-center space-x-2 mb-8">
+    <form onSubmit={handleSearch} className="flex w-full max-w-xl items-center space-x-2">
       <Input
         type="search"
         placeholder="Search posts..."

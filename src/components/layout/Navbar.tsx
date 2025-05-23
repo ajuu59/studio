@@ -30,14 +30,13 @@ export function Navbar() {
             {APP_NAME}
           </span>
         </Link>
-        <nav className="flex flex-1 items-center space-x-2 md:space-x-4">
+        <nav className="flex items-center space-x-2 md:space-x-4">
           <Button variant="ghost" size="sm" asChild>
             <Link href="/">
               <Home className="mr-0 md:mr-2 h-4 w-4" />
               <span className="hidden md:inline">Home</span>
             </Link>
           </Button>
-          {/* Chat link removed */}
           {isMounted && isAuthenticated(['Admin', 'Editor', 'Contributor']) && (
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin">
@@ -48,8 +47,8 @@ export function Navbar() {
           )}
         </nav>
 
-        {/* Add SearchBar here */}
-        <div className="flex-none px-2 md:px-4">
+        {/* Make SearchBar container flexible and centered */}
+        <div className="flex-1 flex justify-center px-2 md:px-4">
           <SearchBar />
         </div>
 
