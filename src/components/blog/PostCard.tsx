@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import type { Post } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -17,7 +18,7 @@ export function PostCard({ post }: PostCardProps) {
   };
 
   return (
-    <Card className="flex flex-col h-full shadow-lg hover:shadow-xl transition-shadow duration-300">
+    <Card className="flex flex-col h-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 ease-in-out">
       <CardHeader>
         {/* Image removed */}
         <CardTitle className="text-xl md:text-2xl font-sans">
