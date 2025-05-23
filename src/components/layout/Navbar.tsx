@@ -7,9 +7,17 @@ import { RoleSelector } from '@/components/auth/RoleSelector';
 import { useAuth } from '@/contexts/AuthContext';
 import { APP_NAME } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
+import { useState, useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Label } from '@/components/ui/label';
 
 export function Navbar() {
   const { isAuthenticated } = useAuth();
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []); // Empty dependency array ensures this runs once on mount
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -33,7 +41,8 @@ export function Navbar() {
               <span className="hidden md:inline">Chat</span>
             </Link>
           </Button>
-          {isAuthenticated(['Admin', 'Editor', 'Contributor']) && ( // Also allow Contributor to see Admin link if they have some admin capabilities
+          {/* Defer rendering of Admin link until client is mounted */}
+          {isMounted && isAuthenticated(['Admin', 'Editor', 'Contributor']) && (
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin">
                 <Settings className="mr-0 md:mr-2 h-4 w-4" />
@@ -43,8 +52,15 @@ export function Navbar() {
           )}
         </nav>
         <div className="flex items-center space-x-2 md:space-x-4">
-          <RoleSelector />
-          {/* Placeholder for actual user profile/login */}
+          {/* Defer RoleSelector rendering or provide a placeholder */}
+          {isMounted ? (
+            <RoleSelector />
+          ) : (
+            <div className="flex items-center gap-2">
+              <Label htmlFor="role-select-placeholder" className="text-sm shrink-0">Role:</Label>
+              <Skeleton id="role-select-placeholder" className="w-[180px] h-9" />
+            </div>
+          )}
           <Button variant="outline" size="icon">
              <UserCircle className="h-5 w-5" />
              <span className="sr-only">User Profile</span>
