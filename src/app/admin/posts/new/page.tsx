@@ -8,15 +8,17 @@ import { useState } from "react";
 
 // Simulate API call
 const createPostApi = (data: any) => {
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<void>((resolve) => { // Removed reject
     setTimeout(() => {
       console.log("Submitting post data:", data);
-      // Simulate success/failure
-      if (Math.random() > 0.1) { // 90% success rate
-        resolve();
-      } else {
-        reject(new Error("Simulated API error"));
-      }
+      // Simulate success
+      resolve();
+      // Removed simulated failure logic
+      // if (Math.random() > 0.1) { // 90% success rate
+      //   resolve();
+      // } else {
+      //   reject(new Error("Simulated API error"));
+      // }
     }, 1000);
   });
 };
