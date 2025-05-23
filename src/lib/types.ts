@@ -1,3 +1,4 @@
+
 export type UserRole = 'Admin' | 'Editor' | 'Contributor' | 'Guest';
 
 export interface Category {
@@ -15,7 +16,7 @@ export interface Comment {
   postId: string;
   author: string;
   content: string;
-  createdAt: string;
+  createdAt: string; // Should be ISO8601 string
 }
 
 export interface Post {
@@ -24,11 +25,9 @@ export interface Post {
   slug: string;
   content: string;
   author: string;
-  createdAt: string;
-  updatedAt?: string;
-  // imageUrl?: string; // Removed
-  // imageHint?: string; // Removed
-  category?: Category;
-  tags?: Tag[];
-  scheduledAt?: string;
+  createdAt: string; // Should be ISO8601 string
+  updatedAt?: string; // Should be ISO8601 string
+  categoryName?: string; // Changed from Category object
+  tagsCsv?: string; // Changed from Tag[] - will store as comma-separated string
+  scheduledAt?: string; // Should be ISO8601 string
 }
