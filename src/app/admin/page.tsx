@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { PlusCircle, Edit, Trash2, FileText, Image as ImageIcon, Users, BarChart2 } from 'lucide-react';
+import { PlusCircle, Edit, Trash2, FileText, Image as ImageIcon, Users, BarChart2, Database } from 'lucide-react';
 import { mockPosts } from '@/data/mock'; // For listing posts
 import {
   Table,
@@ -19,14 +19,46 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { runInitializeDatabaseAction } from './posts/new/actions'; // Import the new action
+import { useToast } from "@/hooks/use-toast"; // Import useToast
 
 export default function AdminPage() {
   const { userRole, isAuthenticated } = useAuth();
+  const { toast } = useToast();
   const [isMounted, setIsMounted] = useState(false);
+  const [isInitializingDb, setIsInitializingDb] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleInitializeDatabase = async () => {
+    setIsInitializingDb(true);
+    try {
+      const result = await runInitializeDatabaseAction();
+      if (result.success) {
+        toast({
+          title: "Database Initialization",
+          description: result.message,
+        });
+      } else {
+        toast({
+          title: "Database Initialization Failed",
+          description: result.message,
+          variant: "destructive",
+        });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: `An unexpected error occurred: ${error.message || 'Unknown error'}`,
+        variant: "destructive",
+      });
+    } finally {
+      setIsInitializingDb(false);
+    }
+  };
+
 
   if (!isMounted) {
     return (
@@ -39,6 +71,7 @@ export default function AdminPage() {
           <CardContent className="flex flex-wrap gap-4">
             <Skeleton className="h-10 w-40" />
             <Skeleton className="h-10 w-36" />
+            <Skeleton className="h-10 w-48" />
           </CardContent>
         </Card>
         <Card>
@@ -79,16 +112,19 @@ export default function AdminPage() {
           <CardTitle className="text-3xl">Admin Dashboard</CardTitle>
           <CardDescription>Manage your blog content and settings. Your current role: <Badge variant="secondary">{userRole}</Badge></CardDescription>
         </CardHeader>
-        {isAuthenticated(['Admin', 'Editor']) && (
         <CardContent className="flex flex-wrap gap-4">
-            <Button asChild>
-              <Link href="/admin/posts/new">
-                <PlusCircle className="mr-2 h-4 w-4" /> Create New Post
-              </Link>
-            </Button>
-            <Button variant="outline">
-              <ImageIcon className="mr-2 h-4 w-4" /> Manage Media
-            </Button>
+            {isAuthenticated(['Admin', 'Editor', 'Contributor']) && (
+              <Button asChild>
+                <Link href="/admin/posts/new">
+                  <PlusCircle className="mr-2 h-4 w-4" /> Create New Post
+                </Link>
+              </Button>
+            )}
+            {isAuthenticated(['Admin', 'Editor']) && (
+              <Button variant="outline">
+                <ImageIcon className="mr-2 h-4 w-4" /> Manage Media
+              </Button>
+            )}
           {isAuthenticated(['Admin']) && (
             <>
             <Button variant="outline">
@@ -97,10 +133,17 @@ export default function AdminPage() {
             <Button variant="outline">
               <BarChart2 className="mr-2 h-4 w-4" /> View Analytics
             </Button>
+            <Button 
+              variant="destructive" 
+              onClick={handleInitializeDatabase}
+              disabled={isInitializingDb}
+            >
+              <Database className="mr-2 h-4 w-4" /> 
+              {isInitializingDb ? 'Initializing DB...' : 'Initialize Database'}
+            </Button>
             </>
           )}
         </CardContent>
-        )}
       </Card>
 
       {isAuthenticated(['Admin', 'Editor', 'Contributor']) && (

@@ -1,7 +1,7 @@
 
 'use server';
 
-import { addPost as dbAddPost, type NewPostDbInput } from '@/lib/db';
+import { addPost as dbAddPost, type NewPostDbInput, initializeDatabase as initDb } from '@/lib/db';
 
 export async function createPostAction(
   formData: NewPostDbInput
@@ -29,6 +29,19 @@ export async function createPostAction(
       error: errorMessage,
       details: errorDetails, // Optional: for server logs, not necessarily for client display
       hint: errorHint // Pass hint to client
+    };
+  }
+}
+
+export async function runInitializeDatabaseAction(): Promise<{ success: boolean; message: string }> {
+  try {
+    await initDb();
+    return { success: true, message: 'Database initialized successfully. Tables should now be created.' };
+  } catch (error: any) {
+    console.error("Error during manual database initialization action:", error);
+    return { 
+      success: false, 
+      message: `Database initialization failed: ${error.message || 'Unknown error'}` 
     };
   }
 }
