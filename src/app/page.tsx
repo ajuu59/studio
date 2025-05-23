@@ -9,7 +9,7 @@ export default function HomePage() {
     <div className="space-y-12">
       <section className="text-center py-10">
         <h1 className="text-4xl md:text-5xl font-bold mb-4">
-          Welcome to Content Canvas
+          Intelligent Automation
         </h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
           Discover insightful articles, tutorials, and stories from our talented authors.
