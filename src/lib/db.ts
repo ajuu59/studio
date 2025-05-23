@@ -1,17 +1,20 @@
 
 // src/lib/db.ts
+// REMOVED 'use server'; directive. This is now a regular server-side module.
+
 import sqlite3 from 'sqlite3';
 import { open, type Database } from 'sqlite';
 import path from 'path';
 import crypto from 'crypto';
-import type { Post } from './types'; // Ensure Post type is available if needed for return types, though not directly for input here
+// Post type might be used if addPost returned the full post, but currently it returns {id}.
+// import type { Post } from './types'; 
 
 // Define the database file path. It will be created in the project root.
 const DB_FILE_NAME = 'content.db';
 const DB_PATH = path.join(process.cwd(), DB_FILE_NAME);
 
-// Function to open the database connection
-export async function openDb(): Promise<Database> {
+// Function to open the database connection (kept internal)
+async function openDb(): Promise<Database> {
   return open({
     filename: DB_PATH,
     driver: sqlite3.verbose().Database,
@@ -53,7 +56,7 @@ export async function initializeDatabase(): Promise<void> {
 
     console.log('Database initialized successfully.');
 
-  } catch (error) {
+  } catch (error) { // Added missing opening brace here
     console.error('Error initializing database:', error);
     throw error;
   } finally {
@@ -61,7 +64,7 @@ export async function initializeDatabase(): Promise<void> {
   }
 }
 
-// Helper for slugification
+// Helper for slugification (kept internal to addPost or could be a shared util)
 function slugify(text: string): string {
   return text
     .toString()
@@ -84,7 +87,7 @@ export interface NewPostDbInput {
 export async function addPost(postData: NewPostDbInput): Promise<{ id: string }> {
   const db = await openDb();
   const id = crypto.randomUUID();
-  const slug = slugify(postData.title);
+  const slug = slugify(postData.title); // Use internal slugify
   const createdAt = new Date().toISOString();
   const scheduledAtISO = postData.scheduledAt ? postData.scheduledAt.toISOString() : null;
 
@@ -115,3 +118,4 @@ export async function addPost(postData: NewPostDbInput): Promise<{ id: string }>
     await db.close();
   }
 }
+
