@@ -49,7 +49,7 @@ export function CategoriesSidebar({ categorizedPosts }: CategoriesSidebarProps) 
       </CardHeader>
       <CardContent>
         <ScrollArea className="h-[calc(100vh-18rem)] pr-3">
-          <Accordion type="multiple" collapsible className="w-full">
+          <Accordion type="multiple" className="w-full">
             {sortedCategories.map((categoryName) => (
               <AccordionItem value={categoryName} key={categoryName}>
                 <AccordionTrigger className="text-lg font-semibold py-3 hover:no-underline font-sans">
