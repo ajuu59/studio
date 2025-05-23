@@ -136,6 +136,26 @@ export async function getPostById(id: string): Promise<Post | null> {
   }
 }
 
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const db = await openDb();
+  try {
+    // It's important that the Post type returned by this matches what PostDisplay expects
+    // Ensure all necessary fields (id, title, slug, content, author, createdAt, etc.) are selected
+    const post = await db.get<Post>(
+      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt 
+       FROM posts 
+       WHERE slug = ?`,
+      slug
+    );
+    return post || null;
+  } catch (error) {
+    console.error(`Error fetching post by slug ${slug}:`, error);
+    throw error;
+  } finally {
+    await db.close();
+  }
+}
+
 export async function getAllPosts(): Promise<Post[]> {
   const db = await openDb();
   try {

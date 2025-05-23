@@ -2,8 +2,7 @@
 "use client"; // This component handles client-side interactions
 
 import { useEffect, useState } from 'react';
-// import Image from 'next/image'; // Image import removed
-import type { Post, Comment as CommentType } from '@/lib/types';
+import type { Post, Comment as CommentType, Category, Tag } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, User, Tag as TagIcon } from 'lucide-react';
 import { format } from 'date-fns';
@@ -11,13 +10,19 @@ import { CommentSection } from '@/components/blog/CommentSection';
 import useLocalStorage from '@/hooks/useLocalStorage';
 
 interface PostDisplayProps {
-  post: Post;
+  post: Post; // Expects the fully transformed Post object
   slug: string;
 }
 
 export function PostDisplay({ post, slug }: PostDisplayProps) {
   // Use local storage for comments, specific to this post
   const [comments, setComments] = useLocalStorage<CommentType[]>(`comments_${slug}`, []);
+
+  // Derive category and tags for display from the Post object
+  // The Post object passed as a prop should already be transformed.
+  const displayCategory = post.category;
+  const displayTags = post.tags || [];
+
 
   const handleNewComment = (commentData: { author: string, content: string }) => {
     const newComment: CommentType = {
@@ -45,8 +50,8 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
           <span className="flex items-center gap-1">
             <CalendarDays className="h-4 w-4" /> {format(new Date(post.createdAt), 'MMMM d, yyyy')}
           </span>
-          {post.category && (
-            <Badge variant="secondary">{post.category.name}</Badge>
+          {displayCategory && (
+            <Badge variant="secondary">{displayCategory.name}</Badge>
           )}
         </div>
       </header>
@@ -58,13 +63,13 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
-      {post.tags && post.tags.length > 0 && (
+      {displayTags.length > 0 && (
         <div className="mt-8 pt-4 border-t font-sans">
           <h3 className="text-sm font-semibold mb-2 text-muted-foreground flex items-center gap-1">
             <TagIcon className="h-4 w-4" /> TAGS
           </h3>
           <div className="flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
+            {displayTags.map((tag) => (
               <Badge key={tag.id} variant="outline">{tag.name}</Badge>
             ))}
           </div>

@@ -1,39 +1,46 @@
 
 // This file is now a Server Component by default (no "use client")
 
-import Image from 'next/image';
 import type { Metadata } from 'next';
-import { notFound } from 'next/navigation'; // Used for 404
-import { mockPosts } from '@/data/mock';
+import { getPostBySlug } from '@/lib/db'; // Import the new DB function
 import type { Post } from '@/lib/types';
-import { Badge } from '@/components/ui/badge';
-import { CalendarDays, User, Tag as TagIcon } from 'lucide-react';
-import { format } from 'date-fns';
-import { PostDisplay } from '@/components/blog/PostDisplay'; // New client component
+import { PostDisplay } from '@/components/blog/PostDisplay';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 
-// This function runs on the server
-const findPostBySlug = (slug: string): Post | undefined => {
-  return mockPosts.find(p => p.slug === slug);
-};
+// Helper function to transform Post from DB to Post for PostDisplay
+// This might be more complex if PostDisplay has significantly different needs
+function transformPostForDisplay(dbPost: Post): Post {
+    // For PostDisplay, we need to ensure category and tags are structured if they exist
+    // The current Post type in types.ts already allows categoryName and tagsCsv
+    // PostDisplay further processes these for rendering.
+    // For now, direct pass-through is fine as PostDisplay handles it.
+    return {
+        ...dbPost,
+        category: dbPost.categoryName ? { id: dbPost.categoryName, name: dbPost.categoryName } : undefined,
+        tags: dbPost.tagsCsv ? dbPost.tagsCsv.split(',').map(t => ({ id: t.trim(), name: t.trim() })) : [],
+    };
+}
+
 
 // generateMetadata runs on the server
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const post = findPostBySlug(params.id);
-  if (!post) {
+  const postFromDb = await getPostBySlug(params.id); // Use slug from params.id
+  if (!postFromDb) {
     return {
       title: 'Post Not Found'
     };
   }
-  const excerpt = post.content.replace(/<[^>]+>/g, '').substring(0, 150);
+  const post = transformPostForDisplay(postFromDb);
+  // Basic excerpt, consider a more robust HTML stripping method if needed
+  const excerpt = post.content.replace(/<[^>]+>/g, '').substring(0, 150); 
   return {
     title: post.title,
     description: excerpt,
     openGraph: {
       title: post.title,
       description: excerpt,
-      images: post.imageUrl ? [{ url: post.imageUrl }] : [],
+      // images: post.imageUrl ? [{ url: post.imageUrl }] : [], // Image removed
     },
   };
 }
@@ -41,14 +48,12 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 // This default export is the Server Component for the page
 export default async function PostPage({ params }: { params: { id: string } }) {
   const slug = params.id;
-  const post = findPostBySlug(slug);
+  const postFromDb = await getPostBySlug(slug);
 
-  if (!post) {
-    // Use Next.js notFound() for proper 404 handling in Server Components
-    // For a more styled 404, you would create a not-found.tsx file in this route segment
+  if (!postFromDb) {
     return (
-        <div className="text-center py-10">
-          <h1 className="text-2xl font-semibold">Post not found</h1>
+        <div className="text-center py-10 max-w-3xl mx-auto">
+          <h1 className="text-2xl font-semibold mb-4">Post not found</h1>
           <p className="text-muted-foreground mt-2">The post you are looking for does not exist or may have been moved.</p>
            <Button asChild className="mt-4">
             <Link href="/">Go to Homepage</Link>
@@ -56,7 +61,9 @@ export default async function PostPage({ params }: { params: { id: string } }) {
         </div>
       );
   }
+  
+  const postForDisplay = transformPostForDisplay(postFromDb);
 
-  // Pass the fetched post and slug to the client component
-  return <PostDisplay post={post} slug={slug} />;
+  // Pass the fetched and transformed post and slug to the client component
+  return <PostDisplay post={postForDisplay} slug={slug} />;
 }
