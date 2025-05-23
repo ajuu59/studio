@@ -1,7 +1,8 @@
+
 "use client";
 
 import Link from 'next/link';
-import { BookMarked, Home, Settings, UserCircle } from 'lucide-react';
+import { BookMarked, Home, Settings, UserCircle, MessageSquare } from 'lucide-react';
 import { RoleSelector } from '@/components/auth/RoleSelector';
 import { useAuth } from '@/contexts/AuthContext';
 import { APP_NAME } from '@/lib/constants';
@@ -19,23 +20,29 @@ export function Navbar() {
             {APP_NAME}
           </span>
         </Link>
-        <nav className="flex flex-1 items-center space-x-4">
+        <nav className="flex flex-1 items-center space-x-2 md:space-x-4">
           <Button variant="ghost" size="sm" asChild>
             <Link href="/">
-              <Home className="mr-2 h-4 w-4" />
-              Home
+              <Home className="mr-0 md:mr-2 h-4 w-4" />
+              <span className="hidden md:inline">Home</span>
             </Link>
           </Button>
-          {isAuthenticated(['Admin', 'Editor']) && (
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/chat">
+              <MessageSquare className="mr-0 md:mr-2 h-4 w-4" />
+              <span className="hidden md:inline">Chat</span>
+            </Link>
+          </Button>
+          {isAuthenticated(['Admin', 'Editor', 'Contributor']) && ( // Also allow Contributor to see Admin link if they have some admin capabilities
             <Button variant="ghost" size="sm" asChild>
               <Link href="/admin">
-                <Settings className="mr-2 h-4 w-4" />
-                Admin
+                <Settings className="mr-0 md:mr-2 h-4 w-4" />
+                <span className="hidden md:inline">Admin</span>
               </Link>
             </Button>
           )}
         </nav>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-2 md:space-x-4">
           <RoleSelector />
           {/* Placeholder for actual user profile/login */}
           <Button variant="outline" size="icon">
