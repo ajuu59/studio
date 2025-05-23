@@ -49,10 +49,16 @@ export default function NewPostPage() {
 
       if ('error' in result) {
         console.error("Failed to create post:", result.error, result.details);
+        let description = result.error || "An unknown error occurred while creating the post.";
+        // Explicitly type result to access hint property
+        const resultWithErrorAndHint = result as { error: string; details?: any; hint?: string };
+        if (resultWithErrorAndHint.hint) {
+          description += ` Hint: ${resultWithErrorAndHint.hint}`;
+        }
         // This error will be caught by PostForm's catch block if it re-throws
         // or if PostForm's onSubmitForm expects a promise that can reject.
         // We are throwing here so PostForm can show its own error toast.
-        throw new Error(result.error || "An unknown error occurred while creating the post.");
+        throw new Error(description);
       }
       
       // Success is handled by PostForm's onSubmitForm resolving successfully
