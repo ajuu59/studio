@@ -21,7 +21,7 @@ This is a blog application built with Next.js, React, and Firebase. It provides 
 
 To get a local copy up and running, follow these simple steps.
 
-### Prerequisites
+### Prerequisitesf
 
 - Node.js (version 18.x or later recommended)
 - npm or yarn
