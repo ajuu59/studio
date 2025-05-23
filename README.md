@@ -11,6 +11,12 @@ This is a blog application built with Next.js, React, and Firebase. It provides 
 - **Commenting:** Users can leave comments on blog posts (stored in local storage).
 - **Searching:** Search functionality to find specific blog posts (basic implementation).
 
+## AI Agent Capabilities
+
+- **Natural Language Processing (NLP):** Enable the AI agent to understand and process user queries effectively.
+- **Content Recommendations:** Allow the AI to suggest relevant articles or posts based on user behavior.
+- **Automated Responses:** Implement AI-driven chatbots for real-time user assistance.
+
 ## Getting Started
 
 To get a local copy up and running, follow these simple steps.
@@ -89,4 +95,3 @@ In the project directory, you can run:
 - `npm run typecheck`: Checks TypeScript types.
 - `npm run genkit:dev`: Starts the Genkit development server.
 - `npm run genkit:watch`: Starts the Genkit development server with watch mode.
-
