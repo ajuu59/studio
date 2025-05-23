@@ -1,3 +1,4 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarIcon, Tags, ListCollapse } from "lucide-react"; // ImageUp removed
+import { CalendarIcon, Tags, ListCollapse } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
@@ -28,12 +29,10 @@ const postFormSchema = z.object({
   content: z.string().min(20, "Content must be at least 20 characters long."),
   category: z.string().optional(),
   tags: z.string().optional(), // comma-separated
-  // imageUrl: z.string().url("Must be a valid URL.").optional().or(z.literal('')), // Removed
-  // imageFile: z.any().optional(), // Removed
   scheduledAt: z.date().optional(),
 });
 
-type PostFormValues = z.infer<typeof postFormSchema>;
+export type PostFormValues = z.infer<typeof postFormSchema>; // Exporting type
 
 interface PostFormProps {
   initialData?: Partial<PostFormValues>; // For editing
@@ -50,7 +49,6 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
       content: "",
       category: "",
       tags: "",
-      // imageUrl: "", // Removed
     },
   });
 
@@ -58,9 +56,9 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
     try {
       await onSubmitForm(data);
       toast({ title: "Success", description: "Post saved successfully." });
-      // form.reset(); // Optionally reset form
+      // form.reset(); // Optionally reset form after successful submission
     } catch (error) {
-      toast({ title: "Error", description: "Failed to save post.", variant: "destructive" });
+      toast({ title: "Error", description: "Failed to save post. " + (error instanceof Error ? error.message : "Please try again."), variant: "destructive" });
     }
   };
   
@@ -95,7 +93,7 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
                   <FormControl>
                     <Textarea
                       placeholder="Write your blog post here..."
-                      className="min-h-[200px] font-serif" // Apply story font here
+                      className="min-h-[200px] font-serif"
                       {...field}
                     />
                   </FormControl>
@@ -138,9 +136,6 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
               />
             </div>
 
-            {/* ImageUrl Field Removed */}
-            {/* ImageFile Field Removed */}
-
             <FormField
               control={form.control}
               name="scheduledAt"
@@ -171,7 +166,7 @@ export function PostForm({ initialData, onSubmitForm, isSubmitting }: PostFormPr
                         mode="single"
                         selected={field.value}
                         onSelect={field.onChange}
-                        disabled={(date) => date < new Date() || date < new Date("1900-01-01")}
+                        disabled={(date) => date < new Date(new Date().setHours(0,0,0,0)) } // Disable past dates
                         initialFocus
                       />
                     </PopoverContent>

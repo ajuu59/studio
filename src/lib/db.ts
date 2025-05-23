@@ -3,18 +3,18 @@
 import sqlite3 from 'sqlite3';
 import { open, type Database } from 'sqlite';
 import path from 'path';
+import crypto from 'crypto';
+import type { Post } from './types'; // Ensure Post type is available if needed for return types, though not directly for input here
 
 // Define the database file path. It will be created in the project root.
 const DB_FILE_NAME = 'content.db';
 const DB_PATH = path.join(process.cwd(), DB_FILE_NAME);
 
 // Function to open the database connection
-// It's often better to manage a single connection instance or a small pool,
-// but for simplicity in this initial setup, we'll open a new connection.
 export async function openDb(): Promise<Database> {
   return open({
     filename: DB_PATH,
-    driver: sqlite3.verbose().Database, // Using verbose for more detailed error logs during development
+    driver: sqlite3.verbose().Database,
   });
 }
 
@@ -30,11 +30,11 @@ export async function initializeDatabase(): Promise<void> {
         slug TEXT NOT NULL UNIQUE,
         content TEXT NOT NULL,
         author TEXT NOT NULL,
-        categoryName TEXT,      -- Store category name directly
-        tagsCsv TEXT,           -- Store tags as a comma-separated string
-        createdAt TEXT NOT NULL,  -- ISO8601 date string
-        updatedAt TEXT,         -- ISO8601 date string
-        scheduledAt TEXT        -- ISO8601 date string
+        categoryName TEXT,
+        tagsCsv TEXT,
+        createdAt TEXT NOT NULL,
+        updatedAt TEXT,
+        scheduledAt TEXT
       );
     `);
     console.log('Table "posts" created or already exists.');
@@ -45,7 +45,7 @@ export async function initializeDatabase(): Promise<void> {
         postId TEXT NOT NULL,
         author TEXT NOT NULL,
         content TEXT NOT NULL,
-        createdAt TEXT NOT NULL, -- ISO8601 date string
+        createdAt TEXT NOT NULL,
         FOREIGN KEY (postId) REFERENCES posts(id) ON DELETE CASCADE
       );
     `);
@@ -55,22 +55,63 @@ export async function initializeDatabase(): Promise<void> {
 
   } catch (error) {
     console.error('Error initializing database:', error);
-    throw error; // Re-throw to indicate failure
+    throw error;
   } finally {
     await db.close();
   }
 }
 
-// Example of how you might run this initialization (e.g., in a separate script):
-//
-// import { initializeDatabase } from './lib/db';
-// initializeDatabase().catch(err => {
-//   console.error("Failed to initialize database:", err);
-//   process.exit(1);
-// });
-//
-// You would run this script using: node your-init-script.js
-// Or integrate this call into your application's startup if appropriate for your deployment.
-// For Next.js, this might be part of a build step or a one-time manual execution.
+// Helper for slugification
+function slugify(text: string): string {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')           // Replace spaces with -
+    .replace(/[^\w-]+/g, '')       // Remove all non-word chars
+    .replace(/--+/g, '-');          // Replace multiple - with single -
+}
 
-// Future data access functions (getAllPosts, addPost, etc.) will go here.
+export interface NewPostDbInput {
+  title: string;
+  content: string;
+  author: string;
+  categoryName?: string;
+  tagsCsv?: string;
+  scheduledAt?: Date; // From form, will be converted to ISO string for DB
+}
+
+export async function addPost(postData: NewPostDbInput): Promise<{ id: string }> {
+  const db = await openDb();
+  const id = crypto.randomUUID();
+  const slug = slugify(postData.title);
+  const createdAt = new Date().toISOString();
+  const scheduledAtISO = postData.scheduledAt ? postData.scheduledAt.toISOString() : null;
+
+  try {
+    const result = await db.run(
+      `INSERT INTO posts (id, title, slug, content, author, categoryName, tagsCsv, createdAt, scheduledAt)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      id,
+      postData.title,
+      slug,
+      postData.content,
+      postData.author,
+      postData.categoryName || null,
+      postData.tagsCsv || null,
+      createdAt,
+      scheduledAtISO
+    );
+
+    if (result.changes === undefined || result.changes === 0) {
+      throw new Error("Post creation failed, database operation reported no changes.");
+    }
+    console.log(`Post created with ID: ${id}, Slug: ${slug}`);
+    return { id };
+  } catch (error) {
+    console.error('Error adding post to DB:', error);
+    throw error;
+  } finally {
+    await db.close();
+  }
+}
