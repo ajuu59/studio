@@ -9,13 +9,8 @@ import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
 import { APP_NAME } from '@/lib/constants';
 
-const geistSans = GeistSans({
-  variable: '--font-geist-sans',
-});
-
-const geistMono = GeistMono({
-  variable: '--font-geist-mono',
-});
+// GeistSans and GeistMono are objects, not functions to be called.
+// Their .variable property gives the CSS variable name.
 
 const merriweather = Merriweather({
   variable: '--font-merriweather',
@@ -38,8 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${merriweather.variable} font-sans antialiased flex flex-col min-h-screen`}>
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${GeistSans.variable} ${GeistMono.variable} ${merriweather.variable} font-sans antialiased flex flex-col min-h-screen`}>
         <AppProviders>
           <Navbar />
           <main className="flex-grow container py-8">
