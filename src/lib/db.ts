@@ -136,6 +136,23 @@ export async function getPostById(id: string): Promise<Post | null> {
   }
 }
 
+export async function getAllPosts(): Promise<Post[]> {
+  const db = await openDb();
+  try {
+    const posts = await db.all<Post[]>(
+      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt
+       FROM posts
+       ORDER BY createdAt DESC`
+    );
+    return posts;
+  } catch (error) {
+    console.error('Error fetching all posts:', error);
+    throw error;
+  } finally {
+    await db.close();
+  }
+}
+
 export interface PostUpdateDbInput {
   title: string;
   content: string;
@@ -171,7 +188,6 @@ export async function updatePost(id: string, postData: PostUpdateDbInput): Promi
       if (!checkExists) {
         throw new Error("Post not found for update.");
       }
-      // If it exists but no values changed, it's still a success in terms of operation
       console.log(`Post with ID: ${id} update attempted. No actual value changes or post not found if changes are 0.`);
     }
     console.log(`Post with ID: ${id} updated successfully.`);
@@ -183,4 +199,3 @@ export async function updatePost(id: string, postData: PostUpdateDbInput): Promi
     await db.close();
   }
 }
-
