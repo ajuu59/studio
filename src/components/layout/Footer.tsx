@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -36,7 +37,7 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-2">{APP_NAME}</h3>
             <p className="text-sm text-muted-foreground">
-              Create, manage, and share your content effortlessly.
+              Automate, manage, and share your content effortlessly.
             </p>
           </div>
           <div>
@@ -73,3 +74,4 @@ export function Footer() {
     </footer>
   );
 }
+

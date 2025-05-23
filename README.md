@@ -1,6 +1,7 @@
-# Blog Application
 
-This is a blog application built with Next.js, React, and Firebase. It provides functionalities for users to interact with blog posts and for administrators to manage content.
+# Intelligent Automation Application
+
+This is a blog application built with Next.js, React, and Firebase. It provides functionalities for users to interact with blog posts and for administrators to manage content, with integrated AI capabilities.
 
 ## Features
 
@@ -9,10 +10,9 @@ This is a blog application built with Next.js, React, and Firebase. It provides 
 - **Post Creation (Admin/Editor/Contributor):** Authorized users can create new blog posts through a dedicated form.
 - **Post Management (Admin/Editor):** An admin panel allows for moderation and management of existing blog posts.
 - **Commenting:** Users can leave comments on blog posts (stored in local storage).
-- **Searching:** Search functionality to find specific blog posts (basic implementation).
+- **Searching:** Search functionality to find specific blog posts.
 
 ## AI Agent Capabilities
-
 - **Natural Language Processing (NLP):** Enable the AI agent to understand and process user queries effectively.
 - **Content Recommendations:** Allow the AI to suggest relevant articles or posts based on user behavior.
 - **Automated Responses:** Implement AI-driven chatbots for real-time user assistance.
@@ -21,7 +21,7 @@ This is a blog application built with Next.js, React, and Firebase. It provides 
 
 To get a local copy up and running, follow these simple steps.
 
-### Prerequisitesf
+### Prerequisites
 
 - Node.js (version 18.x or later recommended)
 - npm or yarn

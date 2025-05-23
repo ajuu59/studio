@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { SearchBar } from '@/components/blog/SearchBar'; // Import SearchBar
+import { SearchBar } from '@/components/blog/SearchBar';
 
 export function Navbar() {
   const { userRole, isAuthenticated, logout } = useAuth();
@@ -47,7 +47,6 @@ export function Navbar() {
           )}
         </nav>
 
-        {/* Make SearchBar container flexible and centered */}
         <div className="flex-1 flex justify-center px-2 md:px-4">
           <SearchBar />
         </div>

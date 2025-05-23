@@ -1,3 +1,4 @@
+
 'use server';
 /**
  * @fileOverview A basic AI chat flow.
@@ -9,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { APP_NAME } from '@/lib/constants';
 
 const ChatInputSchema = z.object({
   message: z.string().describe('The user message to the AI assistant.'),
@@ -28,7 +30,7 @@ const chatPrompt = ai.definePrompt({
   name: 'chatPrompt',
   input: {schema: ChatInputSchema},
   output: {schema: ChatOutputSchema},
-  prompt: `You are a helpful AI assistant for 'Content Canvas', a blog platform.
+  prompt: `You are a helpful AI assistant for '${APP_NAME}', a platform for intelligent content automation.
   Respond to the user's query concisely and helpfully.
 
   User's message: {{{message}}}`,
@@ -50,3 +52,4 @@ const chatFlow = ai.defineFlow(
     return output;
   }
 );
+

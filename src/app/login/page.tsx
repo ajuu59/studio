@@ -5,7 +5,7 @@ import { APP_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
   title: `Login | ${APP_NAME}`,
-  description: 'Login to your Content Canvas account.',
+  description: `Login to your ${APP_NAME} account.`,
 };
 
 export default function LoginPage() {
@@ -15,3 +15,4 @@ export default function LoginPage() {
     </div>
   );
 }
+

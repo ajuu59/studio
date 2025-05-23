@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     default: APP_NAME,
     template: `%s | ${APP_NAME}`,
   },
-  description: 'A modern platform for content creation and management.',
-  keywords: ['blog', 'content management', 'cms', 'publishing'],
+  description: 'A modern platform for intelligent content automation and management.',
+  keywords: ['blog', 'content management', 'cms', 'publishing', 'ai', 'automation'],
 };
 
 export default function RootLayout({
@@ -46,3 +46,4 @@ export default function RootLayout({
     </html>
   );
 }
+
