@@ -33,11 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="dark">
       <body className={`${GeistSans.variable} ${GeistMono.variable} ${merriweather.variable} font-sans antialiased flex flex-col min-h-screen`}>
         <AppProviders>
           <Navbar />
-          <main className="flex-grow container py-8">
+          <main className="flex-grow container mx-auto py-8">
             {children}
           </main>
           <Footer />
