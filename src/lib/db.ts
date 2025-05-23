@@ -6,8 +6,7 @@ import sqlite3 from 'sqlite3';
 import { open, type Database } from 'sqlite';
 import path from 'path';
 import crypto from 'crypto';
-// Post type might be used if addPost returned the full post, but currently it returns {id}.
-// import type { Post } from './types'; 
+import type { Post } from './types'; 
 
 // Define the database file path. It will be created in the project root.
 const DB_FILE_NAME = 'content.db';
@@ -56,7 +55,7 @@ export async function initializeDatabase(): Promise<void> {
 
     console.log('Database initialized successfully.');
 
-  } catch (error) { // Added missing opening brace here
+  } catch (error) {
     console.error('Error initializing database:', error);
     throw error;
   } finally {
@@ -64,7 +63,7 @@ export async function initializeDatabase(): Promise<void> {
   }
 }
 
-// Helper for slugification (kept internal to addPost or could be a shared util)
+// Helper for slugification (kept internal or could be a shared util)
 function slugify(text: string): string {
   return text
     .toString()
@@ -87,7 +86,7 @@ export interface NewPostDbInput {
 export async function addPost(postData: NewPostDbInput): Promise<{ id: string }> {
   const db = await openDb();
   const id = crypto.randomUUID();
-  const slug = slugify(postData.title); // Use internal slugify
+  const slug = slugify(postData.title); 
   const createdAt = new Date().toISOString();
   const scheduledAtISO = postData.scheduledAt ? postData.scheduledAt.toISOString() : null;
 
@@ -114,6 +113,72 @@ export async function addPost(postData: NewPostDbInput): Promise<{ id: string }>
   } catch (error) {
     console.error('Error adding post to DB:', error);
     throw error;
+  } finally {
+    await db.close();
+  }
+}
+
+export async function getPostById(id: string): Promise<Post | null> {
+  const db = await openDb();
+  try {
+    const post = await db.get<Post>(
+      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt 
+       FROM posts 
+       WHERE id = ?`,
+      id
+    );
+    return post || null;
+  } catch (error) {
+    console.error(`Error fetching post by ID ${id}:`, error);
+    throw error; // Re-throw to be handled by the caller
+  } finally {
+    await db.close();
+  }
+}
+
+export interface PostUpdateDbInput {
+  title: string;
+  content: string;
+  categoryName?: string;
+  tagsCsv?: string;
+  scheduledAt?: Date | null; // From form
+}
+
+export async function updatePost(id: string, postData: PostUpdateDbInput): Promise<{ success: boolean }> {
+  const db = await openDb();
+  const updatedAt = new Date().toISOString();
+  const slug = slugify(postData.title); // Recalculate slug if title changes
+  const scheduledAtISO = postData.scheduledAt instanceof Date ? postData.scheduledAt.toISOString() : null;
+
+
+  try {
+    const result = await db.run(
+      `UPDATE posts
+       SET title = ?, slug = ?, content = ?, categoryName = ?, tagsCsv = ?, updatedAt = ?, scheduledAt = ?
+       WHERE id = ?`,
+      postData.title,
+      slug,
+      postData.content,
+      postData.categoryName || null,
+      postData.tagsCsv || null,
+      updatedAt,
+      scheduledAtISO,
+      id
+    );
+
+    if (result.changes === undefined || result.changes === 0) {
+      const checkExists = await db.get('SELECT 1 FROM posts WHERE id = ?', id);
+      if (!checkExists) {
+        throw new Error("Post not found for update.");
+      }
+      // If it exists but no values changed, it's still a success in terms of operation
+      console.log(`Post with ID: ${id} update attempted. No actual value changes or post not found if changes are 0.`);
+    }
+    console.log(`Post with ID: ${id} updated successfully.`);
+    return { success: true };
+  } catch (error) {
+    console.error(`Error updating post with ID ${id} in DB:`, error);
+    throw error; 
   } finally {
     await db.close();
   }

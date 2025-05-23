@@ -2,6 +2,7 @@
 "use client";
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Added for navigation
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,12 +20,13 @@ import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { runInitializeDatabaseAction } from './posts/new/actions'; // Import the new action
-import { useToast } from "@/hooks/use-toast"; // Import useToast
+import { runInitializeDatabaseAction } from './posts/new/actions'; 
+import { useToast } from "@/hooks/use-toast"; 
 
 export default function AdminPage() {
   const { userRole, isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const router = useRouter(); // Initialize router
   const [isMounted, setIsMounted] = useState(false);
   const [isInitializingDb, setIsInitializingDb] = useState(false);
 
@@ -58,7 +60,6 @@ export default function AdminPage() {
       setIsInitializingDb(false);
     }
   };
-
 
   if (!isMounted) {
     return (
@@ -101,9 +102,10 @@ export default function AdminPage() {
     );
   }
 
-  // Mock handlers
-  const handleEditPost = (postId: string) => console.log(`Edit post ${postId}`);
-  const handleDeletePost = (postId: string) => console.log(`Delete post ${postId}`);
+  const handleEditPost = (postId: string) => {
+    router.push(`/admin/posts/edit/${postId}`);
+  };
+  const handleDeletePost = (postId: string) => console.log(`Delete post ${postId}`); // Placeholder
 
   return (
     <div className="space-y-8">
@@ -165,7 +167,6 @@ export default function AdminPage() {
               </TableHeader>
               <TableBody>
                 {mockPosts.map((post) => (
-                  // Filter posts by author for 'Contributor' role (simplified example)
                   (userRole === 'Contributor' && post.author !== 'Contributor User' && post.author !== userRole) ? null : (
                   <TableRow key={post.id}>
                     <TableCell className="font-medium">{post.title}</TableCell>

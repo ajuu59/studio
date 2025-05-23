@@ -31,3 +31,4 @@ export interface Post {
   tagsCsv?: string; // Changed from Tag[] - will store as comma-separated string
   scheduledAt?: string; // Should be ISO8601 string
 }
+
