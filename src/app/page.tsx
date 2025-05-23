@@ -59,7 +59,7 @@ export default async function HomePage() {
             Intelligent Automation
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl md:mx-0 mx-auto mb-8">
-            Discover insightful articles, tutorials, and stories from our talented authors.
+            Discover insightful articles, latest news, tutorials, and stories around testing, dev, devops etc with Artificial Intelligence.
           </p>
         </div>
 
