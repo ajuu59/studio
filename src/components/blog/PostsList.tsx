@@ -68,7 +68,7 @@ export function PostsList({ initialPosts, totalPosts }: PostsListProps) {
           <PostCard key={post.id} post={post} />
         ))}
         {isLoading && Array.from({ length: POSTS_PER_PAGE / 2 }).map((_, index) => ( 
-          <Card className="flex flex-col h-full shadow-lg">
+          <Card key={`skeleton-post-${index}`} className="flex flex-col h-full shadow-lg">
             <CardHeader>
               <Skeleton className="h-8 w-3/4 mb-2" />
               <Skeleton className="h-4 w-1/2" />
