@@ -59,7 +59,7 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
       {/* Image section removed */}
 
       <div
-        className="prose prose-lg dark:prose-invert max-w-none break-words font-serif" // Added font-serif
+        className="prose prose-lg dark:prose-invert max-w-none break-words" // Removed explicit font-serif, prose class handles it
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 

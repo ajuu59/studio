@@ -102,10 +102,8 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground font-serif; /* Default to serif for story feel */
+    @apply bg-background text-foreground font-sans; /* Default to sans-serif for UI */
   }
-  /* Ensure headings and specific UI elements use sans-serif if needed */
-  h1, h2, h3, h4, h5, h6, button, input, label, select, textarea {
-    @apply font-sans;
-  }
+  /* Headings and specific UI elements will inherit font-sans from body.
+     Article content (prose) will use font-serif as defined in tailwind.config.js */
 }
