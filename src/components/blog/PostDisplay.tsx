@@ -52,11 +52,13 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
         </div>
       )}
 
-      <div className="mt-12 pt-6 border-t">
-        <h2 className="text-2xl font-semibold mb-4 font-sans">Feedback & Comments</h2>
-        <p className="text-muted-foreground font-serif">
-          For comments or questions: You can reach out to me via email at <a href="mailto:your.email@example.com" className="text-primary hover:underline">your.email@example.com</a> or connect with me on <a href="#" className="text-primary hover:underline">LinkedIn</a> (replace with your actual link).
-        </p>
+      <div className="mt-12 pt-6 border-t text-center">
+        <a
+          href="/about"
+          className="text-primary hover:underline text-lg font-sans"
+        >
+          Read about me ...
+        </a>
       </div>
     </article>
   );
