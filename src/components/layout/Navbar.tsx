@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { BookMarked, Home, Settings, UserCircle, LogIn, LogOut } from 'lucide-react';
+import { Home, Settings, UserCircle, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { APP_NAME, DEFAULT_USER_ROLE } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
@@ -10,6 +10,31 @@ import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { SearchBar } from '@/components/blog/SearchBar';
+
+// Custom SVG Logo Component
+const LogoIcon = () => (
+  <svg
+    width="28" // Increased size slightly for better visibility
+    height="28"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className="h-7 w-7 text-primary" // Applied consistent sizing and primary color
+  >
+    {/* Rounded Square (Checkbox Body) */}
+    <rect x="3" y="3" width="15" height="15" rx="3" stroke="currentColor" strokeWidth="2" fill="none" />
+    {/* Checkmark */}
+    <path d="M7 10.5L10 13.5L15.5 8" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    {/* Neural Network / AI Element (Simplified) */}
+    <circle cx="17.5" cy="5.5" r="1.5" fill="currentColor" />
+    <circle cx="20.5" cy="8.5" r="1.5" fill="currentColor" />
+    <circle cx="17.5" cy="11.5" r="1.5" fill="currentColor" />
+    <path d="M16.1132 6.55175L18.8868 7.44825" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+    <path d="M18.8868 9.55175L16.1132 10.4482" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+    <path d="M17.5 7V10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+  </svg>
+);
+
 
 export function Navbar() {
   const { userRole, isAuthenticated, logout } = useAuth();
@@ -25,7 +50,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center space-x-2">
-          <BookMarked className="h-6 w-6 text-primary" />
+          <LogoIcon />
           <span className="font-bold sm:inline-block">
             {APP_NAME}
           </span>
@@ -87,4 +112,3 @@ export function Navbar() {
     </header>
   );
 }
-
