@@ -10,6 +10,7 @@ import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { SearchBar } from '@/components/blog/SearchBar';
+import { ThemeToggleButton } from './ThemeToggleButton'; // Added import
 
 // Custom SVG Logo Component
 const LogoIcon = () => (
@@ -80,7 +81,8 @@ export function Navbar() {
           {!isMounted && (
             <div className="flex items-center gap-2">
               <Skeleton className="w-20 h-9" />
-              <Skeleton className="w-10 h-10 rounded-full" />
+              <Skeleton className="w-10 h-10 rounded-full" /> 
+              <Skeleton className="w-10 h-10 rounded-full" /> {/* Placeholder for theme toggle */}
             </div>
           )}
           {isMounted && (
@@ -101,6 +103,7 @@ export function Navbar() {
                   </Link>
                 </Button>
               )}
+              <ThemeToggleButton /> 
               <Button variant="outline" size="icon" className={isLoggedIn ? '' : 'ml-2'}>
                  <UserCircle className="h-5 w-5" />
                  <span className="sr-only">User Profile</span>
