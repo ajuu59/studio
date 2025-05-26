@@ -62,8 +62,8 @@ export default async function HomePage() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
       <section className="md:col-span-2 space-y-12">
-        <div className="text-center py-10 md:py-0 md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 flex items-center justify-center md:justify-start gap-3">
+        <div className="text-center py-10 md:py-0">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 flex items-center justify-center gap-3">
             {APP_NAME}
             {/* Icon image placeholder, same height as text */}
             <img
