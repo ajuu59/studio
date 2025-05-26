@@ -1,5 +1,5 @@
 
-# main.ai Application
+# Main.Ai Application
 
 This is a blog application built with Next.js, React, and Firebase. It provides functionalities for users to interact with blog posts and for administrators to manage content, with integrated AI capabilities for testing and automation.
 
