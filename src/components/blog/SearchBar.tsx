@@ -2,24 +2,19 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 
-interface SearchBarProps {
-  onSearch?: (query: string) => void; // Optional: Implement search logic if needed
-}
-
-export function SearchBar({ onSearch }: SearchBarProps) {
+export function SearchBar() {
   const [query, setQuery] = useState('');
+  const router = useRouter();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (onSearch) {
-      onSearch(query);
-    } else {
-      // Placeholder for actual search functionality
-      console.log("Search query:", query);
+    if (query.trim()) {
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
     }
   };
 
@@ -33,8 +28,8 @@ export function SearchBar({ onSearch }: SearchBarProps) {
         className="flex-grow"
         aria-label="Search posts"
       />
-      <Button type="submit" variant="default" aria-label="Submit search">
-        <Search className="h-4 w-4 mr-2 md:hidden" />
+      <Button type="submit" variant="default" aria-label="Submit search" disabled={!query.trim()}>
+        <Search className="h-4 w-4 mr-0 md:mr-2" />
         <span className="hidden md:inline">Search</span>
       </Button>
     </form>

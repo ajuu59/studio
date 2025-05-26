@@ -183,7 +183,7 @@ export async function updatePost(id: string, postData: PostUpdateDbInput): Promi
   const db = await openDb();
   const updatedAt = new Date().toISOString();
   const slug = slugify(postData.title); // Recalculate slug if title changes
-  const scheduledAtISO = postData.scheduledAt instanceof Date ? postData.scheduledAt.toISOString() : null;
+  const scheduledAtISO = postData.scheduledAt instanceof Date ? postData.scheduledAt.toISOString() : (postData.scheduledAt === null ? null : undefined);
 
 
   try {
@@ -206,8 +206,6 @@ export async function updatePost(id: string, postData: PostUpdateDbInput): Promi
       if (!checkExists) {
         throw new Error("Post not found for update.");
       }
-      // It's possible no actual values changed, resulting in 0 changes. This is not necessarily an error.
-      // console.log(`Post with ID: ${id} update attempted. No actual value changes or post not found if changes are 0.`);
     }
     console.log(`Post with ID: ${id} updated successfully.`);
     return { success: true };
@@ -225,14 +223,31 @@ export async function deletePostById(id: string): Promise<{ success: boolean }> 
     const result = await db.run('DELETE FROM posts WHERE id = ?', id);
     if (result.changes === undefined || result.changes === 0) {
       console.warn(`Attempted to delete post with ID: ${id}, but post was not found or no rows affected.`);
-      // Depending on desired behavior, you might throw an error here if the post should have existed.
-      // For now, we'll consider it "successful" in the sense that the post (if it existed) is gone.
-      // Or, to be stricter: throw new Error("Post not found for deletion or delete operation failed.");
     }
     console.log(`Post with ID: ${id} deleted (or was not found).`);
     return { success: true };
   } catch (error) {
     console.error(`Error deleting post with ID ${id} from DB:`, error);
+    throw error;
+  } finally {
+    await db.close();
+  }
+}
+
+export async function searchPosts(query: string): Promise<Post[]> {
+  const db = await openDb();
+  try {
+    const posts = await db.all<Post[]>(
+      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt
+       FROM posts
+       WHERE title LIKE ? OR content LIKE ?
+       ORDER BY createdAt DESC`,
+      `%${query}%`,
+      `%${query}%`
+    );
+    return posts;
+  } catch (error) {
+    console.error(`Error searching posts with query "${query}":`, error);
     throw error;
   } finally {
     await db.close();
