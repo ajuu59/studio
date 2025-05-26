@@ -29,9 +29,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setUserRole('Admin');
       router.push('/admin'); // Redirect to admin dashboard on successful admin login
       return true;
+    } else if (usernameInput === 'Ajay' && passwordInput === 'terabytes*12') {
+      setUserRole('Admin'); // Ajay logs in with Admin role
+      router.push('/admin'); // Redirect to admin dashboard
+      return true;
     }
     // Placeholder for other role logins if needed in the future
-    // For now, only admin login is implemented with fixed credentials
     return false;
   }, [setUserRole, router]);
 

@@ -70,8 +70,7 @@ export function LoginForm() {
           <LogIn className="h-6 w-6" /> Login
         </CardTitle>
         <CardDescription>
-          Enter your credentials to access your account.
-          (Admin: admin/admin)
+          Enter your credentials. (Admin: admin/admin or Ajay/terabytes*12)
         </CardDescription>
       </CardHeader>
       <form onSubmit={form.handleSubmit(onSubmit)}>
