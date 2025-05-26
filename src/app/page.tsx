@@ -6,6 +6,7 @@ import type { Post as DbPost } from '@/lib/types'; // Database post type
 import type { Post, Category, Tag } from '@/lib/types'; // Type expected by PostCard and used generally
 import { CategoriesSidebar } from '@/components/blog/CategoriesSidebar';
 import { PostsList } from '@/components/blog/PostsList'; // Import the new client component
+import { APP_NAME } from '@/lib/constants';
 
 const POSTS_PER_PAGE = 6; // Initial number of posts to load
 
@@ -18,7 +19,7 @@ function transformDbPostToCardPost(dbPost: DbPost): Post {
   const tags: Tag[] = dbPost.tagsCsv
     ? dbPost.tagsCsv.split(',').map(tagName => ({ id: tagName.trim(), name: tagName.trim() }))
     : [];
-  
+
   return {
     id: dbPost.id,
     title: dbPost.title,
@@ -27,7 +28,7 @@ function transformDbPostToCardPost(dbPost: DbPost): Post {
     author: dbPost.author,
     createdAt: dbPost.createdAt,
     updatedAt: dbPost.updatedAt,
-    category: category, 
+    category: category,
     tags: tags,
     categoryName: dbPost.categoryName,
     tagsCsv: dbPost.tagsCsv,
@@ -64,7 +65,7 @@ export default async function HomePage() {
       <section className="md:col-span-2 space-y-12">
         <div className="text-center py-10 md:py-0 md:text-left">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Test with AI
+            {APP_NAME}
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl md:mx-0 mx-auto mb-8">
             Discover insightful articles, latest news around Artificial Intelligence.
@@ -81,4 +82,3 @@ export default async function HomePage() {
     </div>
   );
 }
-

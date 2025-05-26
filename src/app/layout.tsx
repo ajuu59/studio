@@ -25,6 +25,9 @@ export const metadata: Metadata = {
   },
   description: 'A modern platform for AI-driven testing and content automation.',
   keywords: ['blog', 'content management', 'cms', 'publishing', 'ai', 'automation', 'testing'],
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
@@ -46,4 +49,3 @@ export default function RootLayout({
     </html>
   );
 }
-

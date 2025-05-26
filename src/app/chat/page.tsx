@@ -1,10 +1,11 @@
 
 import { ChatInterface } from '@/components/ai/ChatInterface';
 import type { Metadata } from 'next';
+import { APP_NAME } from '@/lib/constants';
 
 export const metadata: Metadata = {
-  title: 'AI Chat Assistant',
-  description: 'Chat with the Content Canvas AI assistant.',
+  title: `AI Chat Assistant | ${APP_NAME}`,
+  description: `Chat with the ${APP_NAME} AI assistant.`,
 };
 
 export default function ChatPage() {

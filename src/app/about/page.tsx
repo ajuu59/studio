@@ -41,8 +41,8 @@ export default function AboutPage() {
             <Separator className="mb-4" />
             <div className="prose prose-lg dark:prose-invert max-w-none font-serif space-y-4">
               <p>
-                Hello! I'm [Your Name], and this is a space where I can share a bit about myself. 
-                Replace this text with your own biography. Talk about your passions, your work, 
+                Hello! I'm [Your Name], and this is a space where I can share a bit about myself.
+                Replace this text with your own biography. Talk about your passions, your work,
                 your journey, or anything else you'd like to share with your readers.
               </p>
               <p>
@@ -51,11 +51,11 @@ export default function AboutPage() {
                 experience, your hobbies, or your vision for this blog.
               </p>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud 
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute 
-                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla 
-                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia 
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
                 deserunt mollit anim id est laborum.
               </p>
             </div>
@@ -77,7 +77,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-semibold mb-3 font-sans">Contact</h2>
             <Separator className="mb-4" />
             <p className="font-serif text-muted-foreground">
-              You can reach out to me via email at <a href="mailto:your.email@example.com" className="text-primary hover:underline">your.email@example.com</a> or connect with me on 
+              You can reach out to me via email at <a href="mailto:your.email@example.com" className="text-primary hover:underline">your.email@example.com</a> or connect with me on
               {' '}<a href="#" className="text-primary hover:underline">LinkedIn</a> (replace with your actual link).
             </p>
           </section>

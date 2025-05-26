@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Home, Settings, UserCircle, LogIn, LogOut, MessageSquare } from 'lucide-react';
+import { Home, Settings, UserCircle, LogIn, LogOut } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { APP_NAME, DEFAULT_USER_ROLE } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
@@ -78,7 +78,7 @@ export function Navbar() {
           {!isMounted && (
             <div className="flex items-center gap-2">
               <Skeleton className="w-20 h-9" />
-              <Skeleton className="w-10 h-10 rounded-full" /> 
+              <Skeleton className="w-10 h-10 rounded-full" />
               <Skeleton className="w-10 h-10 rounded-full" /> {/* Placeholder for theme toggle */}
             </div>
           )}
@@ -100,7 +100,7 @@ export function Navbar() {
                   </Link>
                 </Button>
               )}
-              <ThemeToggleButton /> 
+              <ThemeToggleButton />
               <Button variant="outline" size="icon" asChild className={isLoggedIn ? '' : 'ml-2'}>
                  <Link href="/about">
                    <UserCircle className="h-5 w-5" />

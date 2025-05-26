@@ -17,7 +17,7 @@ function transformDbPostToCardPost(dbPost: DbPost): Post {
   const tags: Tag[] = dbPost.tagsCsv
     ? dbPost.tagsCsv.split(',').map(tagName => ({ id: tagName.trim(), name: tagName.trim() }))
     : [];
-  
+
   return {
     id: dbPost.id,
     title: dbPost.title,
@@ -26,7 +26,7 @@ function transformDbPostToCardPost(dbPost: DbPost): Post {
     author: dbPost.author,
     createdAt: dbPost.createdAt,
     updatedAt: dbPost.updatedAt,
-    category: category, 
+    category: category,
     tags: tags,
     categoryName: dbPost.categoryName,
     tagsCsv: dbPost.tagsCsv,
@@ -44,7 +44,7 @@ export async function generateMetadata({ searchParams }: { searchParams: { q?: s
   }
   return {
     title: `Search | ${APP_NAME}`,
-    description: 'Search for posts on Test with AI.',
+    description: `Search for posts on ${APP_NAME}.`,
   };
 }
 
