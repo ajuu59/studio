@@ -64,8 +64,10 @@ export function PostsList({ initialPosts, totalPosts }: PostsListProps) {
   return (
     <>
       <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-8">
-        {posts.map((post) => (
-          <PostCard key={post.id} post={post} />
+        {posts.map((post, index) => (
+          <div key={post.id} className={index === 0 ? 'lg:col-span-2' : ''}>
+            <PostCard post={post} />
+          </div>
         ))}
         {isLoading && Array.from({ length: POSTS_PER_PAGE / 2 }).map((_, index) => ( 
           <Card key={`skeleton-post-${index}`} className="flex flex-col h-full shadow-lg">
@@ -120,4 +122,3 @@ const CardContent = ({ className, children, ...props }: React.HTMLAttributes<HTM
 const CardFooter = ({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={className} {...props}>{children}</div>
 );
-
