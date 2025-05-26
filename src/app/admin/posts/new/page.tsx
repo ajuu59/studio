@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { createPostAction } from './actions'; // Import the server action
-import type { NewPostDbInput } from '@/lib/db'; // Import the type from db.ts or actions.ts if re-exported
-import { useToast } from "@/hooks/use-toast"; // Import useToast
+import { createPostAction } from './actions'; 
+import type { NewPostDbInput } from '@/lib/db'; 
+import { useToast } from "@/hooks/use-toast"; 
 
 export default function NewPostPage() {
-  const { isAuthenticated, userRole } = useAuth();
-  const { toast } = useToast(); // Initialize toast
+  const { isAuthenticated, userRole, authorName } = useAuth(); // Added authorName
+  const { toast } = useToast(); 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -23,23 +23,21 @@ export default function NewPostPage() {
   }, []);
 
   const handleCreatePost = async (formData: PostFormValues) => {
-    if (!userRole || userRole === 'Guest') {
-        console.error("Cannot create post: User is not authenticated or is a Guest.");
-        toast({ // Use toast for user feedback
+    if (!userRole || userRole === 'Guest' || !authorName) { // Added check for authorName
+        console.error("Cannot create post: User not authorized or author name missing.");
+        toast({ 
           title: "Authorization Error",
-          description: "User not authorized to create posts.",
+          description: "User not authorized or author information is missing.",
           variant: "destructive",
         });
-        // Throw an error to be caught by PostForm's generic error handler,
-        // or handle it more gracefully if PostForm doesn't re-throw.
-        throw new Error("User not authorized to create posts."); 
+        throw new Error("User not authorized or author information is missing."); 
     }
     setIsSubmitting(true);
     try {
       const postData: NewPostDbInput = {
         title: formData.title,
         content: formData.content,
-        author: userRole, 
+        author: authorName, // Use authorName from AuthContext
         categoryName: formData.category,
         tagsCsv: formData.tags,
         scheduledAt: formData.scheduledAt,
@@ -48,28 +46,18 @@ export default function NewPostPage() {
       const result = await createPostAction(postData);
 
       if ('error' in result) {
-        // The console.error line previously here was removed as the error is logged server-side
-        // and presented as a toast.
         let description = result.error || "An unknown error occurred while creating the post.";
-        // Explicitly type result to access hint property
         const resultWithErrorAndHint = result as { error: string; details?: any; hint?: string };
         if (resultWithErrorAndHint.hint) {
           description += ` Hint: ${resultWithErrorAndHint.hint}`;
         }
-        // This error will be caught by PostForm's catch block if it re-throws
-        // or if PostForm's onSubmitForm expects a promise that can reject.
-        // We are throwing here so PostForm can show its own error toast.
         throw new Error(description);
       }
       
-      // Success is handled by PostForm's onSubmitForm resolving successfully
       console.log("Post created successfully with ID:", result.id);
-      // The PostForm should show its own success toast if onSubmitForm resolves.
 
     } catch (error) {
-      // This console.error is for unexpected errors during the client-side part of the process
       console.error("Error during post creation process client-side:", error);
-      // Let PostForm's generic error handling display a toast
       throw error; 
     } finally {
       setIsSubmitting(false);
@@ -78,10 +66,15 @@ export default function NewPostPage() {
   
   if (!isMounted) {
     return (
-      <div className="space-y-4 p-4">
-        <Skeleton className="h-10 w-1/3" />
-        <Skeleton className="h-8 w-1/4" />
+      <div className="space-y-4 p-4 max-w-3xl mx-auto">
+        <Skeleton className="h-10 w-1/2" />
+        <Skeleton className="h-8 w-1/3" />
         <Skeleton className="h-40 w-full" />
+        <div className="grid md:grid-cols-2 gap-8">
+          <Skeleton className="h-10 w-full" />
+          <Skeleton className="h-10 w-full" />
+        </div>
+        <Skeleton className="h-10 w-full" />
         <Skeleton className="h-10 w-1/4 ml-auto" />
       </div>
     );
@@ -89,7 +82,7 @@ export default function NewPostPage() {
 
   if (!isAuthenticated(['Admin', 'Editor', 'Contributor'])) {
     return (
-      <div className="text-center py-10">
+      <div className="text-center py-10 max-w-3xl mx-auto">
         <h1 className="text-2xl font-semibold mb-4">Access Denied</h1>
         <p className="text-muted-foreground">You do not have permission to create posts.</p>
         <Button asChild className="mt-4">
@@ -105,3 +98,4 @@ export default function NewPostPage() {
     </div>
   );
 }
+
