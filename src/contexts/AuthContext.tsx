@@ -1,11 +1,11 @@
 
 "use client";
 
-import React, { createContext, useContext, ReactNode, useState, useCallback } from 'react';
+import React, { createContext, useContext, ReactNode, useCallback } from 'react';
 import type { UserRole } from '@/lib/types';
 import useLocalStorage from '@/hooks/useLocalStorage';
-import { DEFAULT_USER_ROLE, ADMIN_USERNAME, ADMIN_PASSWORD } from '@/lib/constants';
-import { useRouter } from 'next/navigation'; // For redirecting after login/logout
+import { DEFAULT_USER_ROLE } from '@/lib/constants';
+import { useRouter } from 'next/navigation'; 
 
 interface AuthContextType {
   userRole: UserRole;
@@ -25,21 +25,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, [setUserRoleState]);
 
   const login = useCallback(async (usernameInput: string, passwordInput: string): Promise<boolean> => {
-    if (usernameInput === ADMIN_USERNAME && passwordInput === ADMIN_PASSWORD) {
-      setUserRole('Admin');
-      router.push('/admin'); // Redirect to admin dashboard on successful admin login
-      return true;
-    } else if (usernameInput === 'Ajay' && passwordInput === 'terabytes*12') {
-      setUserRole('Admin'); // Ajay logs in with Admin role
-      router.push('/admin'); // Redirect to admin dashboard
-      return true;
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username: usernameInput, password: passwordInput }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        setUserRole(data.role);
+        router.push('/admin'); // Redirect to admin dashboard on successful login
+        return true;
+      } else {
+        // API returned an error or login failed
+        console.error('Login failed:', data.message || 'Unknown error');
+        return false;
+      }
+    } catch (error) {
+      console.error('Error during login API call:', error);
+      return false;
     }
-    // Placeholder for other role logins if needed in the future
-    return false;
   }, [setUserRole, router]);
 
   const logout = useCallback(() => {
     setUserRole(DEFAULT_USER_ROLE);
+    // Potentially call an API endpoint for server-side session invalidation in the future
     router.push('/login'); // Redirect to login page after logout
   }, [setUserRole, router]);
 
