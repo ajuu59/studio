@@ -37,7 +37,7 @@ export function Footer() {
           <div className="text-center">
             <h3 className="font-semibold text-lg mb-2">{APP_NAME}</h3>
             <p className="text-sm text-muted-foreground">
-              Automate, manage, and share your content effortlessly.
+              AI-driven insights for smarter testing.
             </p>
           </div>
           <div className="text-center">
@@ -74,3 +74,4 @@ export function Footer() {
     </footer>
   );
 }
+

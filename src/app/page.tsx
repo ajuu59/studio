@@ -57,7 +57,7 @@ export default async function HomePage() {
       <section className="md:col-span-2 space-y-12"> {/* Adjusted to md:col-span-2 */}
         <div className="text-center py-10 md:py-0 md:text-left"> {/* Adjusted padding for md screens */}
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            Intelligent Automation
+            Test with AI
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl md:mx-0 mx-auto mb-8">
             Discover insightful articles, latest news, tutorials, and stories around testing, dev, devops etc with Artificial Intelligence.
@@ -90,3 +90,4 @@ export default async function HomePage() {
     </div>
   );
 }
+

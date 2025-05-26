@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     default: APP_NAME,
     template: `%s | ${APP_NAME}`,
   },
-  description: 'A modern platform for intelligent content automation and management.',
-  keywords: ['blog', 'content management', 'cms', 'publishing', 'ai', 'automation'],
+  description: 'A modern platform for AI-driven testing and content automation.',
+  keywords: ['blog', 'content management', 'cms', 'publishing', 'ai', 'automation', 'testing'],
 };
 
 export default function RootLayout({

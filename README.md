@@ -1,7 +1,7 @@
 
-# Intelligent Automation Application
+# Test with AI Application
 
-This is a blog application built with Next.js, React, and Firebase. It provides functionalities for users to interact with blog posts and for administrators to manage content, with integrated AI capabilities.
+This is a blog application built with Next.js, React, and Firebase. It provides functionalities for users to interact with blog posts and for administrators to manage content, with integrated AI capabilities for testing and automation.
 
 ## Features
 
@@ -95,3 +95,4 @@ In the project directory, you can run:
 - `npm run typecheck`: Checks TypeScript types.
 - `npm run genkit:dev`: Starts the Genkit development server.
 - `npm run genkit:watch`: Starts the Genkit development server with watch mode.
+

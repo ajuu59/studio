@@ -30,7 +30,7 @@ const chatPrompt = ai.definePrompt({
   name: 'chatPrompt',
   input: {schema: ChatInputSchema},
   output: {schema: ChatOutputSchema},
-  prompt: `You are a helpful AI assistant for '${APP_NAME}', a platform for intelligent content automation.
+  prompt: `You are a helpful AI assistant for '${APP_NAME}', a platform for AI-driven testing and content automation.
   Respond to the user's query concisely and helpfully.
 
   User's message: {{{message}}}`,
