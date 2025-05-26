@@ -154,14 +154,22 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   }
 }
 
-export async function getAllPosts(): Promise<Post[]> {
+export async function getAllPosts(options?: { limit?: number; offset?: number }): Promise<Post[]> {
   const db = await openDb();
   try {
-    const posts = await db.all<Post[]>(
-      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt
-       FROM posts
-       ORDER BY createdAt DESC`
-    );
+    let query = `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt
+                 FROM posts
+                 ORDER BY createdAt DESC`;
+    const queryParams = [];
+    if (options?.limit) {
+      query += ` LIMIT ?`;
+      queryParams.push(options.limit);
+    }
+    if (options?.offset) {
+      query += ` OFFSET ?`;
+      queryParams.push(options.offset);
+    }
+    const posts = await db.all<Post[]>(query, ...queryParams);
     return posts;
   } catch (error) {
     console.error('Error fetching all posts:', error);
@@ -170,6 +178,20 @@ export async function getAllPosts(): Promise<Post[]> {
     await db.close();
   }
 }
+
+export async function countAllPosts(): Promise<number> {
+  const db = await openDb();
+  try {
+    const result = await db.get<{ count: number }>("SELECT COUNT(*) as count FROM posts");
+    return result?.count ?? 0;
+  } catch (error) {
+    console.error('Error counting posts:', error);
+    throw error;
+  } finally {
+    await db.close();
+  }
+}
+
 
 export interface PostUpdateDbInput {
   title: string;
@@ -253,3 +275,4 @@ export async function searchPosts(query: string): Promise<Post[]> {
     await db.close();
   }
 }
+
