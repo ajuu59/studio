@@ -67,7 +67,7 @@ export default async function HomePage() {
             Test with AI
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl md:mx-0 mx-auto mb-8">
-            Discover insightful articles, latest news, tutorials, and stories around testing, dev, devops etc with Artificial Intelligence.
+            Discover insightful articles, latest news around Artificial Intelligence.
           </p>
         </div>
 
@@ -81,3 +81,4 @@ export default async function HomePage() {
     </div>
   );
 }
+
