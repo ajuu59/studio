@@ -1,10 +1,10 @@
-
 "use client"; // This component handles client-side interactions
 
 import type { Post } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, User, Tag as TagIcon } from 'lucide-react';
 import { format } from 'date-fns';
+import { markdownToHtml } from '@/lib/markdown';
 
 interface PostDisplayProps {
   post: Post; // Expects the fully transformed Post object
@@ -36,7 +36,7 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
 
       <div
         className="prose prose-lg dark:prose-invert max-w-none break-words"
-        dangerouslySetInnerHTML={{ __html: post.content }}
+        dangerouslySetInnerHTML={{ __html: markdownToHtml(post.content) }}
       />
 
       {displayTags.length > 0 && (
