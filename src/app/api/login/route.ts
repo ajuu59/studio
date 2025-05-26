@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
       success = true;
       role = 'Admin';
-      authorName = 'Admin';
+      authorName = 'Admin'; // Default author name for 'admin' user
     } else if (username === 'Ajay' && password === 'terabytes*12') {
       success = true;
       role = 'Admin'; // Ajay logs in with Admin role

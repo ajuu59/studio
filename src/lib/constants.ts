@@ -6,5 +6,5 @@ export const DEFAULT_USER_ROLE: UserRole = 'Guest';
 export const APP_NAME = "Main.Ai";
 
 export const ADMIN_USERNAME = "admin";
-export const ADMIN_PASSWORD = "admin";
+export const ADMIN_PASSWORD = "terabytes*12"; // Updated password
 
