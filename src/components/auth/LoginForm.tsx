@@ -69,9 +69,7 @@ export function LoginForm() {
         <CardTitle className="text-2xl flex items-center gap-2">
           <LogIn className="h-6 w-6" /> Login
         </CardTitle>
-        <CardDescription>
-          Enter your credentials. (Admin: admin/admin or Ajay/terabytes*12)
-        </CardDescription>
+        {/* Removed CardDescription that showed example credentials */}
       </CardHeader>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <CardContent className="space-y-4">
