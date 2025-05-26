@@ -1,43 +1,21 @@
 
 "use client"; // This component handles client-side interactions
 
-import { useEffect, useState } from 'react';
-import type { Post, Comment as CommentType, Category, Tag } from '@/lib/types';
+import type { Post } from '@/lib/types';
 import { Badge } from '@/components/ui/badge';
 import { CalendarDays, User, Tag as TagIcon } from 'lucide-react';
 import { format } from 'date-fns';
-import { CommentSection } from '@/components/blog/CommentSection';
-import useLocalStorage from '@/hooks/useLocalStorage';
 
 interface PostDisplayProps {
   post: Post; // Expects the fully transformed Post object
-  slug: string;
+  slug: string; // Slug might still be useful for other potential features
 }
 
 export function PostDisplay({ post, slug }: PostDisplayProps) {
-  // Use local storage for comments, specific to this post
-  const [comments, setComments] = useLocalStorage<CommentType[]>(`comments_${slug}`, []);
-
   // Derive category and tags for display from the Post object
   // The Post object passed as a prop should already be transformed.
   const displayCategory = post.category;
   const displayTags = post.tags || [];
-
-
-  const handleNewComment = (commentData: { author: string, content: string }) => {
-    const newComment: CommentType = {
-      id: Date.now().toString(), // Simple unique ID
-      postId: post.id,
-      author: commentData.author,
-      content: commentData.content,
-      createdAt: new Date().toISOString(),
-    };
-    setComments(prevComments => [...prevComments, newComment]);
-  };
-
-  const handleDeleteComment = (commentId: string) => {
-    setComments(prevComments => prevComments.filter(c => c.id !== commentId));
-  };
 
   return (
     <article className="max-w-3xl mx-auto py-8">
@@ -56,10 +34,8 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
         </div>
       </header>
 
-      {/* Image section removed */}
-
       <div
-        className="prose prose-lg dark:prose-invert max-w-none break-words" // Removed explicit font-serif, prose class handles it
+        className="prose prose-lg dark:prose-invert max-w-none break-words"
         dangerouslySetInnerHTML={{ __html: post.content }}
       />
 
@@ -76,7 +52,12 @@ export function PostDisplay({ post, slug }: PostDisplayProps) {
         </div>
       )}
 
-      <CommentSection postId={post.id} comments={comments} onNewComment={handleNewComment} onDeleteComment={handleDeleteComment} />
+      <div className="mt-12 pt-6 border-t">
+        <h2 className="text-2xl font-semibold mb-4 font-sans">Feedback & Comments</h2>
+        <p className="text-muted-foreground font-serif">
+          For comments or questions: You can reach out to me via email at <a href="mailto:your.email@example.com" className="text-primary hover:underline">your.email@example.com</a> or connect with me on <a href="#" className="text-primary hover:underline">LinkedIn</a> (replace with your actual link).
+        </p>
+      </div>
     </article>
   );
 }
