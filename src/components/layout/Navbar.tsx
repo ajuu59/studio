@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Home, Settings, UserCircle, LogIn, LogOut } from 'lucide-react';
+import { Home, Settings, UserCircle, LogIn, LogOut, MessageSquare } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { APP_NAME, DEFAULT_USER_ROLE } from '@/lib/constants';
 import { Button } from '@/components/ui/button';
@@ -10,23 +10,20 @@ import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
 import { SearchBar } from '@/components/blog/SearchBar';
-import { ThemeToggleButton } from './ThemeToggleButton'; // Added import
+import { ThemeToggleButton } from './ThemeToggleButton';
 
 // Custom SVG Logo Component
 const LogoIcon = () => (
   <svg
-    width="28" // Increased size slightly for better visibility
+    width="28"
     height="28"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className="h-7 w-7 text-primary" // Applied consistent sizing and primary color
+    className="h-7 w-7 text-primary"
   >
-    {/* Rounded Square (Checkbox Body) */}
     <rect x="3" y="3" width="15" height="15" rx="3" stroke="currentColor" strokeWidth="2" fill="none" />
-    {/* Checkmark */}
     <path d="M7 10.5L10 13.5L15.5 8" stroke="hsl(var(--primary))" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    {/* Neural Network / AI Element (Simplified) */}
     <circle cx="17.5" cy="5.5" r="1.5" fill="currentColor" />
     <circle cx="20.5" cy="8.5" r="1.5" fill="currentColor" />
     <circle cx="17.5" cy="11.5" r="1.5" fill="currentColor" />
@@ -104,9 +101,11 @@ export function Navbar() {
                 </Button>
               )}
               <ThemeToggleButton /> 
-              <Button variant="outline" size="icon" className={isLoggedIn ? '' : 'ml-2'}>
-                 <UserCircle className="h-5 w-5" />
-                 <span className="sr-only">User Profile</span>
+              <Button variant="outline" size="icon" asChild className={isLoggedIn ? '' : 'ml-2'}>
+                 <Link href="/about">
+                   <UserCircle className="h-5 w-5" />
+                   <span className="sr-only">About Me</span>
+                 </Link>
               </Button>
             </>
           )}
