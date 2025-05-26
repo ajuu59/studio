@@ -27,10 +27,10 @@ export default function AboutPage() {
             </div>
             <div className="text-center sm:text-left">
               <CardTitle className="text-3xl font-bold font-sans">
-                Your Name Here
+                Ajay Kumar
               </CardTitle>
               <p className="text-lg text-muted-foreground font-sans">
-                Your Title / Role (e.g., Lead Developer, Content Creator)
+                Test Automation Architect | AI Enthusiast
               </p>
             </div>
           </div>
@@ -41,22 +41,19 @@ export default function AboutPage() {
             <Separator className="mb-4" />
             <div className="prose prose-lg dark:prose-invert max-w-none font-serif space-y-4">
               <p>
-                Hello! I'm [Your Name], and this is a space where I can share a bit about myself.
-                Replace this text with your own biography. Talk about your passions, your work,
-                your journey, or anything else you'd like to share with your readers.
+                I am an experienced Test Automation Architect with a strong background in quality assurance and software testing, particularly within the telecommunications industry. Over the years, I have led and delivered robust automation solutions for enterprise-scale projects.
               </p>
               <p>
-                This section can be as long or as short as you like. You can use multiple paragraphs
-                to structure your thoughts. For example, you might want to discuss your professional
-                experience, your hobbies, or your vision for this blog.
+                Driven by curiosity and a passion for innovation, I am now focused on expanding my expertise in artificial intelligence. My current interests include:
               </p>
+              <ul>
+                <li>RAG (Retrieval-Augmented Generation) Development</li>
+                <li>Agentic AI Solutions for Testing</li>
+                <li>Custom AI Applications for Automation and Quality Assurance</li>
+                <li>Integrating AI into Test Strategy, Execution, and Reporting</li>
+              </ul>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-                pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
-                deserunt mollit anim id est laborum.
+                My goal is to grow my skills in AI and build custom solutions that create real value for businesses and users alike.
               </p>
             </div>
           </section>
@@ -65,7 +62,7 @@ export default function AboutPage() {
             <h2 className="text-2xl font-semibold mb-3 font-sans">My Skills</h2>
             <Separator className="mb-4" />
             <div className="flex flex-wrap gap-2 font-sans">
-              {['React', 'Next.js', 'Tailwind CSS', 'TypeScript', 'Node.js', 'Content Creation', 'AI Integration'].map(skill => (
+              {['Test Automation', 'QA', 'AI/ML', 'RAG', 'Agentic AI', 'Next.js', 'React', 'TypeScript', 'Python'].map(skill => (
                 <span key={skill} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm">
                   {skill}
                 </span>
