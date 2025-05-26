@@ -18,8 +18,8 @@ export default function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6">
             <div className="relative h-32 w-32 sm:h-40 sm:w-40 rounded-full overflow-hidden ring-2 ring-primary shadow-md">
               <Image
-                src="https://placehold.co/300x300.png"
-                alt="My Profile Picture"
+                src="/profile-picture.jpg"
+                alt="Ajay Kumar - Profile Picture"
                 layout="fill"
                 objectFit="cover"
                 data-ai-hint="profile picture"
