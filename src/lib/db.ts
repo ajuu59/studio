@@ -6,7 +6,7 @@ import sqlite3 from 'sqlite3';
 import { open, type Database } from 'sqlite';
 import path from 'path';
 import crypto from 'crypto';
-import type { Post } from './types'; 
+import type { Post } from './types';
 
 // Define the database file path. It will be created in the project root.
 const DB_FILE_NAME = 'content.db';
@@ -86,7 +86,7 @@ export interface NewPostDbInput {
 export async function addPost(postData: NewPostDbInput): Promise<{ id: string }> {
   const db = await openDb();
   const id = crypto.randomUUID();
-  const slug = slugify(postData.title); 
+  const slug = slugify(postData.title);
   const createdAt = new Date().toISOString();
   const scheduledAtISO = postData.scheduledAt ? postData.scheduledAt.toISOString() : null;
 
@@ -122,8 +122,8 @@ export async function getPostById(id: string): Promise<Post | null> {
   const db = await openDb();
   try {
     const post = await db.get<Post>(
-      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt 
-       FROM posts 
+      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt
+       FROM posts
        WHERE id = ?`,
       id
     );
@@ -139,11 +139,9 @@ export async function getPostById(id: string): Promise<Post | null> {
 export async function getPostBySlug(slug: string): Promise<Post | null> {
   const db = await openDb();
   try {
-    // It's important that the Post type returned by this matches what PostDisplay expects
-    // Ensure all necessary fields (id, title, slug, content, author, createdAt, etc.) are selected
     const post = await db.get<Post>(
-      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt 
-       FROM posts 
+      `SELECT id, title, slug, content, author, categoryName, tagsCsv, createdAt, updatedAt, scheduledAt
+       FROM posts
        WHERE slug = ?`,
       slug
     );
@@ -208,13 +206,34 @@ export async function updatePost(id: string, postData: PostUpdateDbInput): Promi
       if (!checkExists) {
         throw new Error("Post not found for update.");
       }
-      console.log(`Post with ID: ${id} update attempted. No actual value changes or post not found if changes are 0.`);
+      // It's possible no actual values changed, resulting in 0 changes. This is not necessarily an error.
+      // console.log(`Post with ID: ${id} update attempted. No actual value changes or post not found if changes are 0.`);
     }
     console.log(`Post with ID: ${id} updated successfully.`);
     return { success: true };
   } catch (error) {
     console.error(`Error updating post with ID ${id} in DB:`, error);
-    throw error; 
+    throw error;
+  } finally {
+    await db.close();
+  }
+}
+
+export async function deletePostById(id: string): Promise<{ success: boolean }> {
+  const db = await openDb();
+  try {
+    const result = await db.run('DELETE FROM posts WHERE id = ?', id);
+    if (result.changes === undefined || result.changes === 0) {
+      console.warn(`Attempted to delete post with ID: ${id}, but post was not found or no rows affected.`);
+      // Depending on desired behavior, you might throw an error here if the post should have existed.
+      // For now, we'll consider it "successful" in the sense that the post (if it existed) is gone.
+      // Or, to be stricter: throw new Error("Post not found for deletion or delete operation failed.");
+    }
+    console.log(`Post with ID: ${id} deleted (or was not found).`);
+    return { success: true };
+  } catch (error) {
+    console.error(`Error deleting post with ID ${id} from DB:`, error);
+    throw error;
   } finally {
     await db.close();
   }

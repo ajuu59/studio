@@ -15,13 +15,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { runInitializeDatabaseAction } from './posts/new/actions'; 
-import { useToast } from "@/hooks/use-toast"; 
-import { getPostsForAdminAction } from './actions';
+import { runInitializeDatabaseAction } from './posts/new/actions';
+import { useToast } from "@/hooks/use-toast";
+import { getPostsForAdminAction, deletePostAction } from './actions';
 import type { Post } from '@/lib/types';
 
 export default function AdminPage() {
@@ -35,30 +45,33 @@ export default function AdminPage() {
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const [postsError, setPostsError] = useState<string | null>(null);
 
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [postToDeleteId, setPostToDeleteId] = useState<string | null>(null);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
+  const fetchPosts = async () => {
+    setIsLoadingPosts(true);
+    setPostsError(null);
+    const result = await getPostsForAdminAction();
+    if ('error' in result) {
+      setPostsError(result.error);
+      toast({ title: "Error Loading Posts", description: result.error, variant: "destructive" });
+    } else {
+      setPosts(result);
+    }
+    setIsLoadingPosts(false);
+  };
+
   useEffect(() => {
     if (isMounted && isAuthenticated(['Admin', 'Editor', 'Contributor'])) {
-      async function fetchPosts() {
-        setIsLoadingPosts(true);
-        setPostsError(null);
-        const result = await getPostsForAdminAction();
-        if ('error' in result) {
-          setPostsError(result.error);
-          toast({ title: "Error Loading Posts", description: result.error, variant: "destructive" });
-        } else {
-          setPosts(result);
-        }
-        setIsLoadingPosts(false);
-      }
       fetchPosts();
     } else if (isMounted) {
-      // If mounted but not authenticated to see posts, stop loading.
       setIsLoadingPosts(false);
     }
-  }, [isMounted, isAuthenticated, toast, userRole]); // userRole added to re-fetch if role changes and grants access
+  }, [isMounted, isAuthenticated, toast, userRole]); // userRole added to re-fetch if role changes
 
   const handleInitializeDatabase = async () => {
     setIsInitializingDb(true);
@@ -69,20 +82,8 @@ export default function AdminPage() {
           title: "Database Initialization",
           description: result.message,
         });
-        // Optionally re-fetch posts after successful DB initialization
         if (isAuthenticated(['Admin', 'Editor', 'Contributor'])) {
-          async function fetchPosts() {
-            setIsLoadingPosts(true);
-            setPostsError(null);
-            const result = await getPostsForAdminAction();
-            if ('error' in result) {
-              setPostsError(result.error);
-            } else {
-              setPosts(result);
-            }
-            setIsLoadingPosts(false);
-          }
-          fetchPosts();
+          fetchPosts(); // Re-fetch posts after successful DB initialization
         }
       } else {
         toast({
@@ -101,6 +102,37 @@ export default function AdminPage() {
       setIsInitializingDb(false);
     }
   };
+
+  const handleEditPost = (postId: string) => {
+    router.push(`/admin/posts/edit/${postId}`);
+  };
+
+  const handleDeletePost = (postId: string) => {
+    setPostToDeleteId(postId);
+    setIsAlertOpen(true);
+  };
+
+  const confirmDeletePost = async () => {
+    if (!postToDeleteId) return;
+
+    const result = await deletePostAction(postToDeleteId);
+    if (result.success) {
+      setPosts(prevPosts => prevPosts.filter(post => post.id !== postToDeleteId));
+      toast({
+        title: "Post Deleted",
+        description: "The post has been successfully deleted.",
+      });
+    } else {
+      toast({
+        title: "Deletion Failed",
+        description: result.error || "Could not delete the post.",
+        variant: "destructive",
+      });
+    }
+    setIsAlertOpen(false);
+    setPostToDeleteId(null);
+  };
+
 
   if (!isMounted) {
     return (
@@ -143,11 +175,6 @@ export default function AdminPage() {
     );
   }
 
-  const handleEditPost = (postId: string) => {
-    router.push(`/admin/posts/edit/${postId}`);
-  };
-  const handleDeletePost = (postId: string) => console.log(`Delete post ${postId}`); // Placeholder
-
   return (
     <div className="space-y-8">
       <Card>
@@ -176,12 +203,12 @@ export default function AdminPage() {
             <Button variant="outline">
               <BarChart2 className="mr-2 h-4 w-4" /> View Analytics
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={handleInitializeDatabase}
               disabled={isInitializingDb}
             >
-              <Database className="mr-2 h-4 w-4" /> 
+              <Database className="mr-2 h-4 w-4" />
               {isInitializingDb ? 'Initializing DB...' : 'Initialize Database'}
             </Button>
             </>
@@ -222,7 +249,7 @@ export default function AdminPage() {
                 </TableHeader>
                 <TableBody>
                   {posts.map((post) => (
-                    (userRole === 'Contributor' && post.author !== userRole) ? null : ( // Simplified Contributor check
+                    (userRole === 'Contributor' && post.author !== userRole) ? null : (
                     <TableRow key={post.id}>
                       <TableCell className="font-medium">{post.title}</TableCell>
                       <TableCell>{post.categoryName || 'N/A'}</TableCell>
@@ -252,6 +279,20 @@ export default function AdminPage() {
           </CardContent>
         </Card>
       )}
+      <AlertDialog open={isAlertOpen} onOpenChange={setIsAlertOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the post.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setPostToDeleteId(null)}>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={confirmDeletePost}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
