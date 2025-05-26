@@ -54,6 +54,8 @@ export default function AboutPage() {
               </ul>
               <p>
                 My goal is to grow my skills in AI and build custom solutions that create real value for businesses and users alike.
+                I also enjoy sharing my knowledge and experiences through writing and mentoring.
+                I believe AI has the potential to revolutionize the way we approach software testing and quality assurance or technology as a whole and I am excited to be part of this journey.
               </p>
             </div>
           </section>
