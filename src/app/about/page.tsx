@@ -77,8 +77,8 @@ export default function AboutPage() {
             <h2 className="text-2xl font-semibold mb-3 font-sans">Contact</h2>
             <Separator className="mb-4" />
             <p className="font-serif text-muted-foreground">
-              You can reach out to me via email at <a href="mailto:your.email@example.com" className="text-primary hover:underline">your.email@example.com</a> or connect with me on
-              {' '}<a href="#" className="text-primary hover:underline">LinkedIn</a> (replace with your actual link).
+              You can reach out to me via email at <a href="mailto:ajuu03@gmail.com" className="text-primary hover:underline">ajuu03@gmail.com</a> or connect with me on
+              {' '}<a href="https://linkedin.com/in/ajay-kumar-6897a14b" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">LinkedIn</a>.
             </p>
           </section>
 
