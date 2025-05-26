@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import { Merriweather } from 'next/font/google';
 import { GeistSans } from 'geist/font/sans';
@@ -23,7 +22,7 @@ export const metadata: Metadata = {
     default: APP_NAME,
     template: `%s | ${APP_NAME}`,
   },
-  description: 'A modern platform for AI-driven testing and content automation.',
+  description: 'A blog where you can read about Artifical Intelligence and happenings in industry.',
   keywords: ['blog', 'content management', 'cms', 'publishing', 'ai', 'automation', 'testing'],
   icons: {
     icon: '/favicon.ico',
