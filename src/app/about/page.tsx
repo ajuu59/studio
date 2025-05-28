@@ -1,4 +1,3 @@
-
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -56,6 +55,12 @@ export default function AboutPage() {
                 My goal is to grow my skills in AI and build custom solutions that create real value for businesses and users alike.
                 I also enjoy sharing my knowledge and experiences through writing and mentoring.
                 I believe AI has the potential to revolutionize the way we approach software testing and quality assurance or technology as a whole and I am excited to be part of this journey.
+              </p>
+              <p>
+                In my free time, I enjoy exploring new technologies, contributing to open-source projects, and engaging with the tech community through blogs and social media.
+              </p>
+              <p>
+                I would strongly recommend you to adapt and use AI.
               </p>
             </div>
           </section>
